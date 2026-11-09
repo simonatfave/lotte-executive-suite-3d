@@ -133,10 +133,10 @@ scene.environmentIntensity = 0.35;
 
 const camera = new THREE.PerspectiveCamera(54, innerWidth/innerHeight, 0.05, 900);
 const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true; controls.dampingFactor = 0.07;
+controls.enableDamping = true; controls.dampingFactor = 0.055;
 controls.minDistance = 0.3; controls.maxDistance = 34;
 controls.maxPolarAngle = Math.PI * 0.94;
-controls.rotateSpeed = 0.5;
+controls.rotateSpeed = 0.42;
 
 const H = 2.95, TRAY = 2.72, T = 0.16;
 const X0=-9, X1=10, Z0=-3, Z1=3;
@@ -620,11 +620,20 @@ const entry=grp(-2.1,0,FZ1+T/2,0,walls); { box(.99,2.29,.05,M.walnut,0,1.145,0,e
   cyl(.009,.009,.02,M.brass,0,1.52,-.035,entry).rotation.x=Math.PI/2; box(.36,.04,.04,M.chrome,.22,2.2,-.05,entry);
   southWalls.push(...entry.children); }
 // sliding frosted door to bath (parked open)
-{ const sd=grp(6.05,0,Z1+T/2+.05,0,walls); box(1.12,2.26,.03,M.frost,0,1.14,0,sd); for(const yy of [.02,2.26]) box(1.14,.03,.035,M.brassD,0,yy,0,sd); for(const xx of [-.56,.56]) box(.03,2.26,.035,M.brassD,xx,1.14,0,sd); box(.02,.4,.03,M.brass,.48,1.05,-.03,sd); southWalls.push(...sd.children); }
-const leaf=grp(4.06,0,-1.52,1.25,walls); box(1.17,2.27,.045,M.trim,.585,1.135,0,leaf);
+const DOORLEAF=[];   // animated door leaves: they open as the camera approaches and close behind it
+{ const sd=grp(7.15,0,Z1+T/2+.05,0,walls); box(1.12,2.26,.03,M.frost,0,1.14,0,sd); for(const yy of [.02,2.26]) box(1.14,.03,.035,M.brassD,0,yy,0,sd); for(const xx of [-.56,.56]) box(.03,2.26,.035,M.brassD,xx,1.14,0,sd); box(.02,.4,.03,M.brass,.48,1.05,-.03,sd);
+  DOORLEAF.push({ g:sd, slide:true, a:7.15, b:6.05, c:[7.15,Z1+T/2], south:true, k:0, tk:0 }); }
+const leaf=grp(4.06,0,-1.52,Math.PI/2,walls); DOORLEAF.push({ g:leaf, a:Math.PI/2, b:.1, c:[4,-2.1], k:0, tk:0 }); box(1.17,2.27,.045,M.trim,.585,1.135,0,leaf);
 for(const [yy,hh] of [[.62,.9],[1.67,.95]]){ for(const s of [-1,1]){ const p=new THREE.Group(); p.position.set(.585,yy,s*.026); leaf.add(p);
   box(.86,.016,.012,M.trim,0,hh/2,0,p); box(.86,.016,.012,M.trim,0,-hh/2,0,p); box(.016,hh,.012,M.trim,-.43,0,0,p); box(.016,hh,.012,M.trim,.43,0,0,p); } }
 { const h=cyl(.012,.012,.13,M.brass,1.06,1.0,.05,leaf); h.rotation.z=Math.PI/2; sph(.025,M.brass,1.0,1.0,.05,leaf); }
+// foyer -> living door (new): hinged at the west jamb, swings into the foyer
+{ const fl=grp(-3.68,0,Z1+T/2+.03,0,walls); box(1.16,2.36,.045,M.trim,.58,1.18,0,fl);
+  for(const [yy,hh] of [[.64,.92],[1.72,.98]]) for(const s2 of [-1,1]){ const p=new THREE.Group(); p.position.set(.58,yy,s2*.026); fl.add(p);
+    box(.86,.016,.012,M.trim,0,hh/2,0,p); box(.86,.016,.012,M.trim,0,-hh/2,0,p); box(.016,hh,.012,M.trim,-.43,0,0,p); box(.016,hh,.012,M.trim,.43,0,0,p); }
+  for(const s2 of [-1,1]){ const h=cyl(.012,.012,.13,M.brass,1.06,1.0,s2*.05,fl); h.rotation.z=Math.PI/2; sph(.025,M.brass,1.0,1.0,s2*.05,fl); }
+  DOORLEAF.push({ g:fl, a:0, b:-1.48, c:[-3.1,Z1], south:true, k:0, tk:0 }); }
+DOORLEAF.forEach(d=>d.g.traverse(o=>{ if(o.isMesh){ o.userData.noShadowCast=true; o.userData.noBake=true; } }));
 Object.values(WIN).forEach(([a,b])=>windowAt(a,b,Z0));
 switchPlate('z',4,-2.95,-1); switchPlate('z',4,-1.25,1); switchPlate('z',-4,2.6,1); switchPlate('x',Z1+T/2,-3.95,1); switchPlate('x',Z1+T/2,7.95,1);
 
@@ -1327,7 +1336,7 @@ function collect(container, exclude, allowTransparent){
   return list;
 }
 if(!window.__noMerge){
-  const ex=new Set([...southWalls, ...drapes.map(d=>d.g), ...shades.map(s=>s.g), turndown, welcome, ...floors]);
+  const ex=new Set([...southWalls, ...DOORLEAF.map(d=>d.g), ...drapes.map(d=>d.g), ...shades.map(s=>s.g), turndown, welcome, ...floors]);
   scene.updateMatrixWorld(true);
   const south=mergeInto(root, southWalls.filter(m=>m.isMesh && !m.material.transparent));
   southWalls.length=0; southWalls.push(...south);
@@ -1473,9 +1482,16 @@ const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').m
 /* ================= camera ================= */
 let tween=null;
 function flyTo(p,tg,dur=2,done=null,delay=0){ const p0=camera.position.clone(), p1=new THREE.Vector3(...p); let curve=null, d=dur;
-  const pts=RM? null : routeVia(p0,p1); if(pts){ curve=new THREE.CatmullRomCurve3(pts,false,'centripetal',.5); d=THREE.MathUtils.clamp(curve.getLength()/2.1, dur, 5.2); }
-  tween={ p0, t0:controls.target.clone(), p1, t1:new THREE.Vector3(...tg), curve, s:performance.now()+delay, d:(RM?.05:d)*1000, done }; needsRender=Math.max(needsRender,2); }
+  if(dur>.1) d=dur*CAM_SLOW;
+  const pts=RM? null : routeVia(p0,p1); if(pts){ curve=new THREE.CatmullRomCurve3(pts,false,'centripetal',.5); d=THREE.MathUtils.clamp(curve.getLength()/1.2, d, 9.5); }
+  const doors = curve ? DOORLEAF.filter(dl=>curve.getSpacedPoints(60).some(q=>(q.x-dl.c[0])**2+(q.z-dl.c[1])**2<.5)) : [];
+  tween={ p0, t0:controls.target.clone(), p1, t1:new THREE.Vector3(...tg), curve, doors, s:performance.now()+delay, d:(RM?.05:d)*1000, done }; needsRender=Math.max(needsRender,2); }
 const _fw=new THREE.Vector3(), _la=new THREE.Vector3(), _tg=new THREE.Vector3();
+const CAM_SLOW=1.55;
+// walk profile: ease in, cruise, ease out (peak speed only 1.33x the average) / sine ease for in-place moves
+const trap=(k,a=.25)=>{ const v=1/(1-a); return k<a? v*k*k/(2*a) : k>1-a? 1-v*(1-k)*(1-k)/(2*a) : v*(a/2+k-a); };
+const easeSine=k=>-(Math.cos(Math.PI*k)-1)/2;
+const _la2=new THREE.Vector3();
 const smooth5=k=>k*k*k*(k*(6*k-15)+10), sstep=(a,b,x)=>{ const t=Math.min(1,Math.max(0,(x-a)/(b-a))); return t*t*(3-2*t); };
 let ignoreHash=false;
 function go(key, dur=2.0){ const v=VIEWS[key]; if(!v) return; flyTo(v.p,v.t,dur); if(ALL_ZONES.includes(key)||key==='overview'){ if(location.hash.slice(1)!==key){ ignoreHash=true; try{ location.hash=key; }catch(e){} } } }
@@ -1606,12 +1622,20 @@ let lastZone=null, frames=0, rendered=0, lastRenderT=0, fpsS=[], perfT=0, adapti
 function frame(){
   if(benching){ requestAnimationFrame(frame); return; }
   const dt=Math.min(clock.getDelta(),.1), now=performance.now();
+  // doors: open when the camera (or its next waypoint) is near, close again behind it
+  const ddt=Math.min(.5,(now-(frame.lastNow||now))/1000); frame.lastNow=now;   // wall-clock step so doors keep pace with time-based camera moves even on slow frames
+  for(const d of DOORLEAF){ const dx=camera.position.x-d.c[0], dz=camera.position.z-d.c[1]; let near=camera.position.y<3 && dx*dx+dz*dz < (d.tk? 3.2*3.2 : 2.5*2.5);
+    if(!near && tween && tween.doors.includes(d) && dx*dx+dz*dz<5.5*5.5) near=true;   // on our route: open well before we arrive
+    d.tk = near?1:0; if(Math.abs(d.tk-d.k)>.001){ d.k += Math.sign(d.tk-d.k)*Math.min(Math.abs(d.tk-d.k), ddt/(d.slide?1.1:1.4)); const e=d.k*d.k*(3-2*d.k);
+      if(d.slide) d.g.position.x=L(d.a,d.b,e); else d.g.rotation.y=L(d.a,d.b,e); needsRender=Math.max(needsRender,2); } }
   if(tween){ const k=Math.min(1,Math.max(0,(now-tween.s)/tween.d));
-    if(tween.curve){ const u=smooth5(k); tween.curve.getPointAt(u,camera.position); tween.curve.getPointAt(Math.min(1,u+.07),_la);
+    if(tween.curve){ const u=trap(k); tween.curve.getPointAt(u,camera.position);
+      tween.curve.getPointAt(Math.min(1,u+.05),_la); tween.curve.getPointAt(Math.min(1,u+.13),_la2); _la.add(_la2).multiplyScalar(.5);   // averaged look-ahead = gentler turns
       _fw.subVectors(_la,camera.position); _fw.y=0; if(_fw.lengthSq()<1e-6) _fw.subVectors(tween.t1,camera.position); _fw.normalize();
-      _tg.copy(camera.position).addScaledVector(_fw,3); _tg.y=camera.position.y-.2;           // look where we're walking
-      _tg.lerp(tween.t0,1-sstep(0,.22,u)).lerp(tween.t1,sstep(.6,1,u)); controls.target.copy(_tg); }
-    else { const e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2; camera.position.lerpVectors(tween.p0,tween.p1,e); controls.target.lerpVectors(tween.t0,tween.t1,e); }
+      _tg.copy(camera.position).addScaledVector(_fw,3); _tg.y=camera.position.y-.2;
+      _tg.lerp(tween.t0,1-sstep(0,.25,u)).lerp(tween.t1,sstep(.55,1,u));
+      controls.target.lerp(_tg, k>.97? 1 : 1-Math.exp(-dt*3.2)); }                          // damped head turn
+    else { const e=easeSine(k); camera.position.lerpVectors(tween.p0,tween.p1,e); controls.target.lerpVectors(tween.t0,tween.t1,e); }
     if(k>=1){ const f=tween.done; tween=null; f&&f(); } needsRender=Math.max(needsRender,2); }
   // depth of field: only while a guided-tour shot is held still (HQ only)
   { const want = touring && HQ && !tween && !motionLOD; if(want){ const fd=camera.position.distanceTo(controls.target), u=bokeh.uniforms.focus; if(!bokeh.enabled){ u.value=fd; } else if(Math.abs(u.value-fd)>.01){ u.value+=(fd-u.value)*Math.min(1,dt*4); needsRender=Math.max(needsRender,1); } }
@@ -1635,7 +1659,7 @@ function frame(){
     const zone=zoneOf(camera.position);
     if(zone!==lastZone){ lastZone=zone; if(openHS && !touring){ const oz=hsEls.find(h=>h.id===openHS).z; const ok2 = zone==='overview' || oz===zone || (['living','dining'].includes(oz)&&['living','dining'].includes(zone)); if(!ok2 && !tween) closeCard(); } document.querySelectorAll('#planSvg .rm').forEach(r=>r.classList.toggle('on',r.dataset.k===zone)); $('planZone').textContent=t('sp.'+zone); const rn=$('rn'); rn.style.opacity=0; setTimeout(()=>{ rn.textContent=t('sp.'+zone); rn.style.opacity=1; },200); }
     ceilings.visible = camera.position.y <= TRAY-.05;
-    southWalls.forEach(m=>m.visible = !(camera.position.y>3.2));
+    southWalls.forEach(m=>m.visible = !(camera.position.y>3.2)); DOORLEAF.forEach(d=>{ if(d.south) d.g.visible = !(camera.position.y>3.2); });
     VIEW.day.concat(VIEW.night).forEach(m=>m.visible = camera.position.y<3.2);
     const open = zone==='living'||zone==='dining' ? ['living','dining'] : [zone];
     for(const h of hsEls){ let show = open.includes(h.z) && zone!=='overview';
@@ -1660,7 +1684,7 @@ function frame(){
 }
 
 /* ================= start ================= */
-window.__suite = { scene3:scene, camera, go, look:(p,t)=>flyTo(p,t,.01), pbr:()=>({floor:M.floor.map&&M.floor.map.isCompressedTexture||M.floor.map?.isTexture&&!M.floor.map.isCanvasTexture}), scene:(k)=>{ setScene(k); Object.assign(S,SCENES[k]); applyScene(S); sceneMoving=false; envDirty=true; }, hs:(id)=>{ showCard(id); }, renderer, setHQ, tour:()=>enter(true), enter:()=>enter(false), info:()=>({calls:renderer.info.render.calls}) };
+window.__suite = { scene3:scene, camera, go, doors:()=>DOORLEAF.map(d=>+d.k.toFixed(2)), look:(p,t)=>flyTo(p,t,.01), pbr:()=>({floor:M.floor.map&&M.floor.map.isCompressedTexture||M.floor.map?.isTexture&&!M.floor.map.isCanvasTexture}), scene:(k)=>{ setScene(k); Object.assign(S,SCENES[k]); applyScene(S); sceneMoving=false; envDirty=true; }, hs:(id)=>{ showCard(id); }, renderer, setHQ, tour:()=>enter(true), enter:()=>enter(false), info:()=>({calls:renderer.info.render.calls}) };
 if(TIER.low) setHQ(false);
 renderText();
 setScene('welcome');
