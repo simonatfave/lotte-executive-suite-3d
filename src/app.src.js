@@ -11,6 +11,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
+import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 RectAreaLightUniformsLib.init();
@@ -1659,7 +1660,7 @@ function frame(){
 }
 
 /* ================= start ================= */
-window.__suite = { scene3:scene, camera, go, scene:(k)=>{ setScene(k); Object.assign(S,SCENES[k]); applyScene(S); sceneMoving=false; envDirty=true; }, hs:(id)=>{ showCard(id); }, renderer, setHQ, tour:()=>enter(true), enter:()=>enter(false), info:()=>({calls:renderer.info.render.calls}) };
+window.__suite = { scene3:scene, camera, go, look:(p,t)=>flyTo(p,t,.01), pbr:()=>({floor:M.floor.map&&M.floor.map.isCompressedTexture||M.floor.map?.isTexture&&!M.floor.map.isCanvasTexture}), scene:(k)=>{ setScene(k); Object.assign(S,SCENES[k]); applyScene(S); sceneMoving=false; envDirty=true; }, hs:(id)=>{ showCard(id); }, renderer, setHQ, tour:()=>enter(true), enter:()=>enter(false), info:()=>({calls:renderer.info.render.calls}) };
 if(TIER.low) setHQ(false);
 renderText();
 setScene('welcome');
@@ -1669,6 +1670,25 @@ try{ await renderer.compileAsync(scene,camera); }catch(e){}
 await tick(100,'load.shader');
 frame();
 $('intro').classList.add('ready');
+// scanned CC0 materials (Poly Haven, KTX2/Basis) replace the procedural placeholders once loaded
+async function loadPBR(){
+  const L=new KTX2Loader().setTranscoderPath('tex/basis/').detectSupport(renderer), TL=new THREE.TextureLoader(), an=renderer.capabilities.getMaxAnisotropy();
+  const prep=(t,srgb)=>{ t.wrapS=t.wrapT=THREE.RepeatWrapping; t.colorSpace=srgb?THREE.SRGBColorSpace:THREE.NoColorSpace; t.anisotropy=an; return t; };
+  const ld=(f,srgb)=>L.loadAsync('tex/'+f+'.ktx2').then(t=>prep(t,srgb)), lw=(f,srgb)=>TL.loadAsync('tex/'+f+'.webp').then(t=>prep(t,srgb));
+  const k = (TIER.low || Math.max(screen.width,screen.height)*devicePixelRatio<1600) ? '_1k' : '';
+  const [pa,pn,pr,wa,wn,wr,ln]=await Promise.all([lw('floor_diff'+k,1),lw('floor_nor'+k),lw('floor_rough'+k),
+    ld('walnut_veneer_albedo',1),ld('walnut_veneer_normal'),ld('walnut_veneer_roughness'),ld('rough_linen_normal')]);
+  // herringbone baked offline (src/texgen/herringbone.py) from the same layout as the procedural floor, with Poly Haven oak_veneer_01 grain (CC0)
+  for(const t of [pa,pn,pr]) t.repeat.copy(TEX.floor.repeat);
+  Object.assign(M.floor,{ map:pa, normalMap:pn, roughnessMap:pr, roughness:1 }); M.floor.normalScale.set(.7,.7);
+  for(const [m,c] of [[M.walnut,PBR_TINT.walnut],[M.ebony,PBR_TINT.ebony]]){ Object.assign(m,{ map:wa, normalMap:wn, roughnessMap:wr, roughness:.85 }); m.color.setHex(c); }
+  ln.repeat.copy(TEX.fabricN.repeat);
+  scene.traverse(o=>{ if(!o.material) return; for(const m of [].concat(o.material)){ if(m.normalMap===TEX.fabricN){ m.normalMap=ln; m.needsUpdate=true; } } });
+  for(const m of [M.floor,M.walnut,M.ebony]) m.needsUpdate=true;
+  L.dispose(); envDirty=true; needsRender=Math.max(needsRender,4);
+}
+const PBR_TINT={ walnut:0x9a8a80, ebony:0x4a4440 };
+loadPBR().catch(e=>console.warn('PBR textures not loaded',e));
 // opening shot: curtains closed, glide from the foyer through the door while the drapes open on the view
 function opening(){ S.curtain=ST.curtain=1; applyScene(S); camera.position.set(-3.1,1.62,5.4); controls.target.set(-2.5,1.45,-3); controls.update();
   flyTo([-1.0,1.58,1.5],[1.4,1.42,-3],5.5,null,500); setTimeout(()=>{ if(sceneKey==='welcome'){ ST.curtain=0; sceneMoving=true; } },1300); }

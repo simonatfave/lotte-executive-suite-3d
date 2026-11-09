@@ -1,0 +1,4 @@
+Texture sources (all CC0 1.0 / public domain)
+- walnut_veneer, rough_linen — Poly Haven (polyhaven.com), via the CC0-Public-Domain-Textures KTX2 pack
+- floor_* — baked by src/texgen/herringbone.py using Poly Haven "oak_veneer_01" (polyhaven.com/a/oak_veneer_01)
+- basis/ — Basis Universal transcoder (Apache-2.0), from three.js examples
