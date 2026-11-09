@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { RectAreaLightUniformsLib } from 'three/examples/jsm/lights/RectAreaLightUniformsLib.js';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js';
@@ -11,10 +10,8 @@ import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPa
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
 import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
-import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
-RectAreaLightUniformsLib.init();
 const INIT_HASH = location.hash;
 /* ================= CONFIG (client data — replace with real values) ================= */
 const CONFIG = {
@@ -114,9 +111,15 @@ await tick(4,'load.tex');
 
 /* ================= renderer / scene ================= */
 const canvas = document.getElementById('c');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias:false, powerPreference:'high-performance', preserveDrawingBuffer:true });
-const TIER = { low: !window.__forceHigh && (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || (navigator.hardwareConcurrency||8)<=4 || Math.min(screen.width,screen.height)<500) };
-let PR = TIER.low ? 1 : Math.min(devicePixelRatio, 1.5);
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:false, powerPreference:'high-performance' });
+const GPU = (()=>{ try{ const gl=renderer.getContext(), e=gl.getExtension('WEBGL_debug_renderer_info'); return (e? gl.getParameter(e.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER))||''; }catch(e){ return ''; } })();
+// low: phones/tablets, small CPUs, mobile GPUs; mid: integrated laptop GPUs (Intel / older AMD APU); high: everything else (Apple silicon, discrete)
+const TIER = (()=>{ if(window.__forceHigh) return { low:false, mid:false };
+  const mobile=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || (navigator.maxTouchPoints>1 && /Mac/.test(navigator.platform));
+  const low = mobile || (navigator.hardwareConcurrency||8)<=4 || Math.min(screen.width,screen.height)<500 || /Mali|Adreno|PowerVR|SwiftShader|llvmpipe|Microsoft Basic/i.test(GPU);
+  const mid = !low && (/Intel|Radeon\(TM\) Graphics|Radeon Vega/i.test(GPU) || (navigator.deviceMemory||8)<8);
+  return { low, mid }; })();
+let PR = TIER.low ? 1 : Math.min(devicePixelRatio, TIER.mid? 1.25 : 1.5);
 renderer.setPixelRatio(PR);
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -279,7 +282,7 @@ const EYE=1.6, VX=0.5;
 const NIGHT_JOBS=[];
 // night skyline is painted lazily (after the intro, or the first time an evening scene is chosen)
 function paintNight(all){ while(NIGHT_JOBS.length){ const m=NIGHT_JOBS.shift(); m.userData.paint(); if(!all) return NIGHT_JOBS.length>0; } return false; }
-function viewLayer(D, azMax, elMin, elMax, pxW, draw, night){
+function viewLayer(D, azMax, elMin, elMax, pxW, draw, night, name){
   const x0=VX-D*Math.tan(azMax), x1=VX+D*Math.tan(azMax);
   const y0=EYE+D*Math.tan(elMin), y1=EYE+D*Math.tan(elMax);
   const pxH = Math.round(pxW*(y1-y0)/(x1-x0));
@@ -288,11 +291,14 @@ function viewLayer(D, azMax, elMin, elMax, pxW, draw, night){
   const X = az => ((VX+D*Math.tan(az))-x0)/(x1-x0)*pxW;             // azimuth (rad) -> px
   const Y = el => (y1-(EYE+D*Math.tan(el)))/(y1-y0)*pxH;             // elevation (rad) -> px
   const XW = wx => (wx-x0)/(x1-x0)*pxW, YW = wy => (y1-wy)/(y1-y0)*pxH, PPM = pxW/(x1-x0);
-  draw(g,{X,Y,XW,YW,PPM,W:pxW,H:pxH,D,night});
-  const t=toTex(c); t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping; t.anisotropy=4; t.generateMipmaps=true; mat.map=t; mat.needsUpdate=true; };
+  draw(g,{X,Y,XW,YW,PPM,W:pxW,H:pxH,D,night}); if(window.__bakeViews) (window.__viewC=window.__viewC||{})[name]=c;
+  const t=toTex(c); t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping; t.anisotropy=4; t.generateMipmaps=true; mat.map=t; mat.visible=true; mat.needsUpdate=true; };
+  // the skyline is pre-rendered to WebP (src/texgen/bake_views.py); painting it live cost seconds of CPU at load. Paint only as a fallback.
+  const load=()=>{ if(window.__bakeViews){ paint(); return; } new THREE.TextureLoader().load('view/'+name+'.webp', t=>{ t.colorSpace=THREE.SRGBColorSpace; t.wrapS=t.wrapT=THREE.ClampToEdgeWrapping; t.anisotropy=4; mat.map=t; mat.visible=true; mat.needsUpdate=true; try{ needsRender=Math.max(needsRender,2); envDirty=true; }catch(e){} }, undefined, ()=>paint()); };
+  mat.visible=false;
   const m=new THREE.Mesh(new THREE.PlaneGeometry(x1-x0,y1-y0), mat);
   m.position.set((x0+x1)/2,(y0+y1)/2,-D); m.userData.noShadow=true; m.userData.view=true;
-  if(night){ m.userData.paint=paint; NIGHT_JOBS.push(m); } else paint();
+  if(night){ m.userData.paint=load; NIGHT_JOBS.push(m); } else load();
   return m;
 }
 const rad = d => d*Math.PI/180;
@@ -379,9 +385,9 @@ function drawNear(g,ctx){
 const VIEW = { day:[], night:[] };
 for(const night of [false,true]){
   const L = [
-    viewLayer(420, rad(62), rad(-6), rad(42), 2048, drawFar, night),
-    viewLayer(160, rad(62), rad(-14), rad(10), 3072, drawMid, night),
-    viewLayer(70,  rad(62), rad(-40), rad(-2), 3072, drawNear, night),
+    viewLayer(420, rad(62), rad(-6), rad(42), 2048, drawFar, night, (night?'n':'d')+'f'),
+    viewLayer(160, rad(62), rad(-14), rad(10), 3072, drawMid, night, (night?'n':'d')+'m'),
+    viewLayer(70,  rad(62), rad(-40), rad(-2), 3072, drawNear, night, (night?'n':'d')+'n'),
   ];
   L.forEach((m,i)=>{ m.renderOrder=-10+i; if(night){ m.material.opacity=0; m.position.z+=.1; } if(i===0 && !night) m.material.transparent=false; scene.add(m); VIEW[night?'night':'day'].push(m);
     const m2=new THREE.Mesh(m.geometry,m.material); m2.position.set(2*VX-m.position.x+3, m.position.y, -m.position.z); m2.rotation.y=Math.PI; m2.renderOrder=m.renderOrder; m2.userData=m.userData; scene.add(m2); VIEW[night?'night':'day'].push(m2); });
@@ -1289,8 +1295,9 @@ sun.castShadow=true; sun.shadow.mapSize.set(TIER.low?2048:4096, TIER.low?2048:40
 Object.assign(sun.shadow.camera,{left:-12,right:12,top:11,bottom:-11,near:1,far:50}); sun.shadow.bias=-.0003; sun.shadow.normalBias=.02; sun.shadow.radius=5;
 scene.add(sun, sun.target);
 renderer.shadowMap.autoUpdate=false; renderer.shadowMap.needsUpdate=true;
-const winFill=[]; Object.values(WIN).forEach(([a,b])=>{ const r=new THREE.RectAreaLight(0xdfe8f5,0,b-a,1.9); r.position.set((a+b)/2,1.52,Z0+.06); r.lookAt((a+b)/2,1.2,5); root.add(r); winFill.push(r); });
-const bathFill=new THREE.RectAreaLight(0xe6eef8,0,2.2,1.6); bathFill.position.set(7.1,1.7,BZ1-.08); bathFill.lookAt(7.1,1.3,0); root.add(bathFill);
+// window daylight fill: wide soft spots set just outside each window, aimed into the room
+const winFill=[]; Object.values(WIN).forEach(([a,b])=>{ const r=new THREE.SpotLight(0xdfe8f5,0,14,1.1,1,1.6); r.position.set((a+b)/2,2.1,Z0-1.4); r.target.position.set((a+b)/2,.3,Z0+3.2); root.add(r,r.target); r.userData.w=(b-a)/2.4; winFill.push(r); });
+const bathFill=new THREE.SpotLight(0xe6eef8,0,10,1.1,1,1.6); bathFill.position.set(7.1,2.0,BZ1+1.2); bathFill.target.position.set(7.1,.3,BZ1-2.6); root.add(bathFill,bathFill.target);
 const warmAmb = new THREE.AmbientLight(0xffd9a8, 0); scene.add(warmAmb);   // bounce from the coves (was 5 area lights)
 
 function zoneOf(p){ if(p.y>3.2) return 'overview'; if(p.z>Z1+.02) return p.x<1.5? 'foyer':'bath'; if(p.x<-4) return 'dining'; if(p.x<4) return 'living'; return 'bedroom'; }
@@ -1306,7 +1313,8 @@ function registerLight(l){ l.updateMatrixWorld(true); const p=l.getWorldPosition
   if(r.type==='rect'){ r.quat=l.getWorldQuaternion(new THREE.Quaternion()); }
   l.parent?.remove(l); RECS[r.type].push(r); }
 [...lampLights, nightL, ...winFill, bathFill].forEach(registerLight);
-const POOL={ point:[], spot:[], rect:[] }, NPOOL={ point:8, spot:3, rect:2 };
+const WIN_K=6;   // rect-area -> spot calibration
+const POOL={ point:[], spot:[], rect:[] }, NPOOL={ point: TIER.low?6:8, spot: TIER.low?4:5, rect:0 };
 for(let i=0;i<NPOOL.point;i++){ const l=new THREE.PointLight(0xffffff,0,5,2); scene.add(l); POOL.point.push(l); }
 for(let i=0;i<NPOOL.spot;i++){ const l=new THREE.SpotLight(0xffffff,0,5,.5,.5,2); scene.add(l,l.target); POOL.spot.push(l); }
 for(let i=0;i<NPOOL.rect;i++){ const l=new THREE.RectAreaLight(0xffffff,0,1,1); scene.add(l); POOL.rect.push(l); }
@@ -1399,7 +1407,7 @@ function captureStep(){ // one cube per frame: living, bedroom, bath
 }
 
 /* ================= post-processing ================= */
-let HQ = !TIER.low;
+let HQ = !TIER.low;   // low tier: no realtime AO / bloom (baked floor AO still applies)
 const composer = new EffectComposer(renderer);
 composer.setPixelRatio(PR); composer.setSize(innerWidth,innerHeight);
 composer.addPass(new RenderPass(scene,camera));
@@ -1410,7 +1418,8 @@ gtao.blendIntensity = .85;
 { const ss=gtao.setSize.bind(gtao); gtao.setSize=(w,h)=>ss(Math.max(1,w>>1),Math.max(1,h>>1)); }  // AO at half resolution
 composer.addPass(gtao);
 const bokeh = new BokehPass(scene,camera,{ focus:3, aperture:.0018, maxblur:.0042 }); bokeh.enabled=false; composer.addPass(bokeh);
-const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight), .2, .38, 1.35);
+const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth>>1,innerHeight>>1), .2, .38, 1.35);
+{ const bs=bloom.setSize.bind(bloom); bloom.setSize=(w,h)=>bs(Math.max(1,w>>1),Math.max(1,h>>1)); }   // glow is soft anyway: half-res costs a quarter
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 const smaa = new SMAAPass(innerWidth*PR, innerHeight*PR); composer.addPass(smaa);
@@ -1432,7 +1441,7 @@ function applyScene(s){
   const e = s.tod*s.tod*(3-2*s.tod), shut=s.curtain;
   hemi.intensity = L(.75,.05,e)*(1-.55*shut); hemi.color.setHex(0xf1f4ff).lerp(new THREE.Color(0x40486a),e);
   sun.intensity = L(3.0,0,e)*(1-.92*shut);
-  winFill.forEach(r=>r.intensity=L(5,.15,e)*(1-.85*shut)); bathFill.intensity=L(4,.1,e)*(1-.8*shut);
+  winFill.forEach(r=>r.intensity=WIN_K*r.userData.w*L(5,.15,e)*(1-.85*shut)); bathFill.intensity=WIN_K*.9*L(4,.1,e)*(1-.8*shut);
   ceilGlow.forEach(m=>m.emissiveIntensity=.08+1.15*s.cove);
   warmAmb.intensity=.32*s.cove*Math.max(e,.35)+.05*s.lamp;
   const bathLvl=Math.max(s.lamp,.55*(1-s.nl)*(1-e*.4));
@@ -1447,7 +1456,7 @@ function applyScene(s){
   shades.forEach(d=>{ d.g.scale.y=L(.08,d.full,shut); });
   renderer.toneMappingExposure = L(1.0,.95,e)*(s.nl>.5? 1.25:1);
   scene.environmentIntensity = L(.55,.3,e)*(.5+.5*Math.max(s.lamp,s.cove,1-e));
-  bloom.strength = L(.14,.22,e); bloom.threshold = L(1.35,1.7,e); bloom.enabled = e>.25;
+  bloom.strength = L(.14,.22,e); bloom.threshold = L(1.35,1.7,e); bloom.enabled = e>.25 && !TIER.low;
   turndown.visible = s.td>.5; welcome.visible = s.wel>.5;
   renderer.shadowMap.needsUpdate=true; syncPool(true); needsRender=Math.max(needsRender,2);
 }
@@ -1621,7 +1630,7 @@ function setMotionLOD(on){ if(on===motionLOD) return; motionLOD=on; if(!on) need
 // more menu
 $('moreBtn').addEventListener('click',e=>{ e.stopPropagation(); $('menu').classList.toggle('open'); });
 addEventListener('click',e=>{ if(!$('more').contains(e.target)) $('menu').classList.remove('open'); });
-function setHQ(v){ HQ=v; motionLOD=false; $('mHQ').classList.toggle('on',HQ); $('mHQ').querySelector('.v').textContent = HQ? t('ui.hqv'):t('ui.sqv'); gtao.enabled=HQ; smaa.enabled=HQ || !TIER.low; PR = HQ? Math.min(devicePixelRatio,1.5) : 1; renderer.setPixelRatio(PR); composer.setPixelRatio(PR); onResize(); }
+function setHQ(v){ HQ=v; motionLOD=false; $('mHQ').classList.toggle('on',HQ); $('mHQ').querySelector('.v').textContent = HQ? t('ui.hqv'):t('ui.sqv'); gtao.enabled=HQ; smaa.enabled=HQ || !TIER.low; PR = HQ? Math.min(devicePixelRatio, TIER.mid? 1.25 : 1.5) : 1; renderer.setPixelRatio(PR); composer.setPixelRatio(PR); onResize(); }
 $('mHQ').addEventListener('click',()=>setHQ(!HQ));
 $('mFS').addEventListener('click',async()=>{ try{ if(document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); }catch(e){ toast('Full screen unavailable here'); } });
 let perfOn=false; $('mPerf').addEventListener('click',()=>{ perfOn=!perfOn; $('perf').classList.toggle('on',perfOn); $('mPerf').classList.toggle('on',perfOn); $('mPerf').querySelector('.v').textContent=perfOn?'ON':'OFF'; needsRender=Math.max(needsRender,2); });
@@ -1660,7 +1669,7 @@ addEventListener('resize',onResize);
 /* ================= loop (renders only when something changed) ================= */
 const clock=new THREE.Clock(); const tmp=new THREE.Vector3(), pv=new THREE.Vector3(), lookDir=new THREE.Vector3();
 let benching=false;
-let lastZone=null, frames=0, rendered=0, lastRenderT=0, fpsS=[], perfT=0, adaptiveDone=false, mvS=[], lastRenderT2=0, pendPR=0, pendHQ=false;
+let lastZone=null, frames=0, rendered=0, lastRenderT=0, fpsS=[], perfT=0, adaptiveDone=false, mvS=[], lastRenderT2=0, pendPR=0, pendHQ=false, perfSent=false;
 function frame(){
   if(benching){ requestAnimationFrame(frame); return; }
   const dt=Math.min(clock.getDelta(),.1), now=performance.now(); TRACK.tick(dt);
@@ -1718,6 +1727,7 @@ function frame(){
     rendered++; if(lastRenderT && now-lastRenderT<250) fpsS.push(now-lastRenderT); if(fpsS.length>60) fpsS.shift(); lastRenderT=now;
     // adaptive quality: if rendering is slow during the first camera moves, drop to standard
     if(moving && lastRenderT2 && now-lastRenderT2<200){ mvS.push(now-lastRenderT2); if(mvS.length>50){ const avg=mvS.reduce((a,b)=>a+b,0)/mvS.length; mvS.length=0;
+        if(!perfSent){ perfSent=true; const f=1000/avg, b=f>=55?'55+':f>=45?'45-55':f>=30?'30-45':f>=20?'20-30':'under-20'; TRACK.pv('/perf/fps-'+b); TRACK.pv('/perf/tier-'+(TIER.low?'low':TIER.mid?'mid':'high')+'-pr'+PR); }
         if(avg>19 && !window.__noAuto){ if(PR>1.01) pendPR=Math.max(1,PR-.25); else if(HQ && avg>30){ pendHQ=true; } } } }
     lastRenderT2=now;
     if(perfOn && now-perfT>300){ perfT=now; const avg=fpsS.length? fpsS.reduce((a,b)=>a+b,0)/fpsS.length:0;
@@ -1736,6 +1746,12 @@ renderText();
 setScene('welcome');
 const startKey = VIEWS[location.hash.slice(1)] ? location.hash.slice(1) : 'foyer';
 go(startKey,0.01);
+// fewer shader variants: give every plain standard material a 1x1 white colour/roughness map so they share programs
+// (~2/3 fewer programs to compile; on Windows/ANGLE each one costs 50-200 ms). Normal maps are left alone (zero-UV geometry).
+{ const W1=new THREE.DataTexture(new Uint8Array([255,255,255,255]),1,1); W1.needsUpdate=true; W1.colorSpace=THREE.SRGBColorSpace;
+  const R1=new THREE.DataTexture(new Uint8Array([255,255,255,255]),1,1); R1.needsUpdate=true;
+  scene.traverse(o=>{ if(!o.material) return; for(const m of [].concat(o.material)){ if(!m.isMeshStandardMaterial || m.userData.unified) continue; m.userData.unified=1;
+    if(!m.map){ m.map=W1; m.needsUpdate=true; } if(!m.roughnessMap){ m.roughnessMap=R1; m.needsUpdate=true; } } }); }
 try{ await renderer.compileAsync(scene,camera); }catch(e){}
 { bokeh.enabled=true; composer.render(.016); bokeh.enabled=false; }
 await tick(100,'load.shader');
@@ -1746,10 +1762,11 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function whenIdle(){ while(tween || performance.now()-lastMove<400 || sceneMoving) await sleep(150); }
 async function precompile(){ holdRender=true; try{ await renderer.compileAsync(scene,camera); }catch(e){} holdRender=false; needsRender=Math.max(needsRender,4); }
 async function loadPBR(){
-  const L=new KTX2Loader().setTranscoderPath('tex/basis/').detectSupport(renderer), TL=new THREE.TextureLoader(), an=renderer.capabilities.getMaxAnisotropy();
+  const TL=new THREE.TextureLoader(), an=renderer.capabilities.getMaxAnisotropy();
   const prep=(t,srgb)=>{ t.wrapS=t.wrapT=THREE.RepeatWrapping; t.colorSpace=srgb?THREE.SRGBColorSpace:THREE.NoColorSpace; t.anisotropy=an; return t; };
-  const ld=(f,srgb)=>L.loadAsync('tex/'+f+'.ktx2').then(t=>prep(t,srgb)), lw=(f,srgb)=>TL.loadAsync('tex/'+f+'.webp').then(t=>prep(t,srgb));
-  const k = (TIER.low || Math.max(screen.width,screen.height)*devicePixelRatio<1600) ? '_1k' : '';
+  const lw=(f,srgb)=>TL.loadAsync('tex/'+f+'.webp').then(t=>prep(t,srgb)), ld=lw;
+  const big = !TIER.low && !TIER.mid && Math.max(screen.width,screen.height)*devicePixelRatio>=2400 && (navigator.deviceMemory||8)>=8;
+  const k = big ? '' : '_1k';
   const [pa,pn,pr,wa,wn,wr,ln]=await Promise.all([lw('floor_diff'+k,1),lw('floor_nor'+k),lw('floor_rough'+k),
     ld('walnut_veneer_albedo',1),ld('walnut_veneer_normal'),ld('walnut_veneer_roughness'),ld('rough_linen_normal')]);
   await whenIdle();
@@ -1760,7 +1777,10 @@ async function loadPBR(){
   ln.repeat.copy(TEX.fabricN.repeat);
   scene.traverse(o=>{ if(!o.material) return; for(const m of [].concat(o.material)){ if(m.normalMap===TEX.fabricN){ m.normalMap=ln; m.needsUpdate=true; } } });
   for(const m of [M.floor,M.walnut,M.ebony]) m.needsUpdate=true;
-  L.dispose(); await precompile(); envDirty=true;
+  await precompile(); envDirty=true;
+  // free the procedural placeholders that the scans replaced (GPU + canvas memory)
+  const inUse=new Set(); scene.traverse(o2=>{ if(o2.material) for(const m of [].concat(o2.material)) for(const k3 of ['map','normalMap','roughnessMap']) if(m[k3]) inUse.add(m[k3]); });
+  for(const k2 of ['floor','floorN','floorR','fabricN']){ const tx=TEX[k2]; if(tx && tx.isTexture && !inUse.has(tx)){ tx.dispose(); tx.image=null; } }
 }
 const PBR_TINT={ walnut:0x9a8a80, ebony:0x4a4440 };
 // baked ambient occlusion for everything at floor level (Cycles, src/texgen/bake_floor_ao.py), projected top-down via a uv1 channel

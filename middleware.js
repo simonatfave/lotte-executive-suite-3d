@@ -1,7 +1,9 @@
 // FAVE Proposal Gate — reusable access-code page for client proposal demos
 // Edit only the CONFIG block below for each new proposal.
 // Fonts are public (SIL OFL) and cached forever, so skip the gate for them.
-export const config = { matcher: '/((?!fonts/|_vercel/).*)' };   // Vercel Web Analytics script/endpoint must not be gated
+// fonts, hashed bundles, textures and baked maps are static and not secret on their own: skip the edge check (faster, fewer invocations).
+// The HTML (and so the experience) stays behind the access code.
+export const config = { matcher: '/((?!fonts/|_vercel/|assets/|tex/|lm/|view/).*)' };   // Vercel Web Analytics script/endpoint must not be gated
 
 const CONFIG = {
   clientName: 'LOTTE HOTEL',                     // used in title / alt text
