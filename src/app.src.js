@@ -1404,8 +1404,8 @@ const composer = new EffectComposer(renderer);
 composer.setPixelRatio(PR); composer.setSize(innerWidth,innerHeight);
 composer.addPass(new RenderPass(scene,camera));
 const gtao = new GTAOPass(scene,camera,innerWidth,innerHeight);
-gtao.updateGtaoMaterial({ radius:.32, distanceExponent:1.6, thickness:1.2, scale:1.1, samples:12, distanceFallOff:1, screenSpaceRadius:false });
-gtao.updatePdMaterial({ lumaPhi:10, depthPhi:2, normalPhi:3, radius:6, rings:2, samples:16 });
+gtao.updateGtaoMaterial({ radius:.32, distanceExponent:1.6, thickness:1.2, scale:1.1, samples:8, distanceFallOff:1, screenSpaceRadius:false });
+gtao.updatePdMaterial({ lumaPhi:10, depthPhi:2, normalPhi:3, radius:6, rings:2, samples:10 });
 gtao.blendIntensity = .85;
 { const ss=gtao.setSize.bind(gtao); gtao.setSize=(w,h)=>ss(Math.max(1,w>>1),Math.max(1,h>>1)); }  // AO at half resolution
 composer.addPass(gtao);
@@ -1529,7 +1529,7 @@ function flyTo(p,tg,dur=2,done=null,delay=0,opt={}){ const p0=camera.position.cl
   tween={ p0, t0:controls.target.clone(), p1, t1:new THREE.Vector3(...tg), curve, doors, s:performance.now()+delay, d:(RM?.05:d)*1000, done }; needsRender=Math.max(needsRender,2); }
 const _fw=new THREE.Vector3(), _la=new THREE.Vector3(), _tg=new THREE.Vector3();
 // camera pacing (one place to tune): slow, calm hotel-walkthrough feel
-const CAM_SLOW=2.3, WALK_MPS=.72, WALK_MAX_S=13, HEAD_RATE=1.7, DOOR_LEAD=1.15;
+const CAM_SLOW=1.8, WALK_MPS=.95, WALK_MAX_S=10, HEAD_RATE=2.4, DOOR_LEAD=1.15;
 // walk profile: ease in, cruise, ease out (peak speed only 1.33x the average) / sine ease for in-place moves
 const trap=(k,a=.32)=>{ const v=1/(1-a); return k<a? v*k*k/(2*a) : k>1-a? 1-v*(1-k)*(1-k)/(2*a) : v*(a/2+k-a); };
 const easeSine=k=>-(Math.cos(Math.PI*k)-1)/2;
@@ -1660,7 +1660,7 @@ addEventListener('resize',onResize);
 /* ================= loop (renders only when something changed) ================= */
 const clock=new THREE.Clock(); const tmp=new THREE.Vector3(), pv=new THREE.Vector3(), lookDir=new THREE.Vector3();
 let benching=false;
-let lastZone=null, frames=0, rendered=0, lastRenderT=0, fpsS=[], perfT=0, adaptiveDone=false;
+let lastZone=null, frames=0, rendered=0, lastRenderT=0, fpsS=[], perfT=0, adaptiveDone=false, mvS=[], lastRenderT2=0, pendPR=0, pendHQ=false;
 function frame(){
   if(benching){ requestAnimationFrame(frame); return; }
   const dt=Math.min(clock.getDelta(),.1), now=performance.now(); TRACK.tick(dt);
@@ -1695,7 +1695,8 @@ function frame(){
   // tour timing
   if(touring && !tourPaused && !tween){ tourElapsed+=dt*1000; const el=tourElapsed, bar=document.querySelector('#tProg b'); if(bar) bar.style.width=Math.min(100,el/STEP_MS*100)+'%'; if(el>STEP_MS){ if(tourI===TOUR.length-1){ TRACK.pv('/tour/complete'); stopTour(); $('info').classList.add('open'); } else showStep(tourI+1); } }
   const moving = !!tween || fw || st || (now-lastMove<140) || sceneMoving;
-  setMotionLOD(moving);
+  setMotionLOD(moving); if(!moving) lastRenderT2=0;
+  if(!moving && (pendPR || pendHQ) && now-lastMove>600){ if(pendPR){ PR=pendPR; pendPR=0; renderer.setPixelRatio(PR); composer.setPixelRatio(PR); onResize(); } else { pendHQ=false; setHQ(false); } }
   if(needsRender>0 && !holdRender){
     needsRender--;
     syncPool(false);
@@ -1716,7 +1717,9 @@ function frame(){
     if(renderer.shadowMap.needsUpdate && !sceneMoving) renderer.shadowMap.needsUpdate=false;
     rendered++; if(lastRenderT && now-lastRenderT<250) fpsS.push(now-lastRenderT); if(fpsS.length>60) fpsS.shift(); lastRenderT=now;
     // adaptive quality: if rendering is slow during the first camera moves, drop to standard
-    if(!adaptiveDone && fpsS.length>=45){ adaptiveDone=true; const avg=fpsS.reduce((a,b)=>a+b,0)/fpsS.length; if(avg>42 && HQ && !window.__noAuto){ setHQ(false); toast(t('ui.quality')+': '+t('ui.sqv'),2200); } }
+    if(moving && lastRenderT2 && now-lastRenderT2<200){ mvS.push(now-lastRenderT2); if(mvS.length>50){ const avg=mvS.reduce((a,b)=>a+b,0)/mvS.length; mvS.length=0;
+        if(avg>19 && !window.__noAuto){ if(PR>1.01) pendPR=Math.max(1,PR-.25); else if(HQ && avg>30){ pendHQ=true; } } } }
+    lastRenderT2=now;
     if(perfOn && now-perfT>300){ perfT=now; const avg=fpsS.length? fpsS.reduce((a,b)=>a+b,0)/fpsS.length:0;
       $('perf').textContent=`${avg? (1000/avg).toFixed(0):'–'} fps (rendering)   draw calls ${calls}   tris ${(tris/1000).toFixed(0)}k\nlights in shader: ${NPOOL.point} point · ${NPOOL.spot} spot · ${NPOOL.rect} area (of ${RECS.point.length}/${RECS.spot.length}/${RECS.rect.length})\npixel ratio ${PR.toFixed(2)} · AO ${HQ?'on':'off'} · tier ${TIER.low?'low':'high'} · idle frames skip`; }
   }
