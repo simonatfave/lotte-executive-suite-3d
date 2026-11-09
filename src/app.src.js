@@ -10,18 +10,20 @@ import { GTAOPass } from 'three/examples/jsm/postprocessing/GTAOPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { SMAAPass } from 'three/examples/jsm/postprocessing/SMAAPass.js';
+import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 
 RectAreaLightUniformsLib.init();
 const INIT_HASH = location.hash;
 /* ================= CONFIG (client data — replace with real values) ================= */
 const CONFIG = {
-  hotel:  { ko:'호텔명', en:'Hotel Name', ja:'ホテル名', zh:'酒店名称' },
-  city:   { ko:'서울', en:'Seoul', ja:'ソウル', zh:'首尔' },
-  room:   { ko:'이그제큐티브 스위트', en:'Executive Suite', ja:'エグゼクティブスイート', zh:'行政套房' },
-  area: 150, floor:'28F', bed:'King', guests:'2 + 1',
+  // source: lottehotel.com/seoul-grand — Executive Tower Suite · Presidential Suite
+  hotel:  { ko:'더그랜드롯데 서울', en:'The Grand Lotte Seoul', ja:'ザ・グランドロッテ ソウル', zh:'首尔大乐天酒店' },
+  city:   { ko:'이그제큐티브 타워', en:'Executive Tower', ja:'エグゼクティブタワー', zh:'行政塔' },
+  room:   { ko:'프레지덴셜 스위트', en:'Presidential Suite', ja:'プレジデンシャルスイート', zh:'总统套房' },
+  area: 255, floor:'15:00 / 11:00', bed:{ ko:'더블', en:'Double', ja:'ダブル', zh:'双人床' }, guests:'2',
   guest: 'Mr. & Mrs. Kim',
-  bookingUrl: '',   // e.g. 'https://hotel.example/booking?room=exec-suite'
+  bookingUrl: 'https://www.lottehotel.com/seoul-grand/ko/rooms/executive-tower-presidential-suite-room',
 };
 
 /* ================= i18n ================= */
@@ -30,73 +32,73 @@ const I18N = {
    'nav.foyer':'현관','nav.living':'거실','nav.dining':'다이닝','nav.bedroom':'침실','nav.bath':'욕실','nav.overview':'전체 평면',
    'scene.welcome':'웰컴','scene.day':'데이','scene.evening':'이브닝','scene.turndown':'턴다운','scene.sleep':'슬립',
    'ui.scenes':'조명 시나리오','ui.tour':'자동 투어','ui.sound':'사운드','ui.gyro':'자이로','ui.hq':'고화질','ui.sq':'표준 화질','ui.info':'객실 정보',
-   'ui.area':'면적','ui.bed':'침대','ui.guests':'투숙 인원','ui.view':'전망','ui.floor':'층','ui.viewv':'남산 · 도심 파노라마','ui.book':'이 객실 예약하기','ui.closer':'가까이 보기','ui.close':'닫기',
+   'ui.area':'면적','ui.bed':'침대','ui.guests':'투숙 인원','ui.view':'전망','ui.floor':'체크인 / 아웃','ui.viewv':'시티 뷰','ui.book':'이 객실 예약하기','ui.closer':'가까이 보기','ui.close':'닫기',
    'ui.hint':'드래그 — 둘러보기 · 휠 — 줌 · WASD — 이동<br>바닥 더블클릭 — 그 위치로 이동 · ＋ — 어메니티 정보',
    'ui.bookToast':'예약 페이지로 연결됩니다 (제안용 데모)','ui.gyroNo':'이 화면에서는 기기 방향 센서를 쓸 수 없습니다. 호텔 사이트에 올리면 동작합니다.','ui.welcome':'환영합니다',
-   'ui.am':['킹 베드','레인 샤워','프리스탠딩 욕조','워크인 클로짓','미니바 · 커피','업무 데스크','8인 다이닝','남산 뷰'] },
+   'ui.am':['슈퍼프리미엄 베딩 (Simmons)','Gastaldi 이집트 코튼 침구','LG 스타일러','75인치 UHD TV','미니바 · 커피 & 티','초고속 인터넷 무료','La Cime 라운지','시티 뷰'] },
  en:{ 'sp.foyer':'Foyer · Dressing','sp.living':'Living Room','sp.dining':'Dining Room','sp.bedroom':'Bedroom','sp.bath':'Bathroom','sp.overview':'Floor Plan',
    'nav.foyer':'Foyer','nav.living':'Living','nav.dining':'Dining','nav.bedroom':'Bedroom','nav.bath':'Bath','nav.overview':'Floor Plan',
    'scene.welcome':'Welcome','scene.day':'Day','scene.evening':'Evening','scene.turndown':'Turndown','scene.sleep':'Sleep',
    'ui.scenes':'Lighting scenes','ui.tour':'Auto tour','ui.sound':'Sound','ui.gyro':'Gyro','ui.hq':'High quality','ui.sq':'Standard','ui.info':'Room details',
-   'ui.area':'Size','ui.bed':'Bed','ui.guests':'Guests','ui.view':'View','ui.floor':'Floor','ui.viewv':'Namsan & city panorama','ui.book':'Book this room','ui.closer':'Take a closer look','ui.close':'Close',
+   'ui.area':'Size','ui.bed':'Bed','ui.guests':'Guests','ui.view':'View','ui.floor':'Check-in / out','ui.viewv':'City view','ui.book':'Book this room','ui.closer':'Take a closer look','ui.close':'Close',
    'ui.hint':'Drag — look around · Scroll — zoom · WASD — walk<br>Double-click floor — move there · ＋ — amenity details',
    'ui.bookToast':'Links to the booking page (proposal demo)','ui.gyroNo':'Motion sensors are blocked in this preview. They will work on the hotel site.','ui.welcome':'Welcome',
-   'ui.am':['King bed','Rain shower','Freestanding tub','Walk-in closet','Minibar · coffee','Work desk','Dining for 8','Namsan view'] },
+   'ui.am':['Super-premium bedding (Simmons)','Gastaldi Egyptian cotton linens','LG Styler','75-inch UHD TV','Minibar · coffee & tea','Free high-speed internet','La Cime lounge','City view'] },
  ja:{ 'sp.foyer':'エントランス · ドレッシング','sp.living':'リビング','sp.dining':'ダイニング','sp.bedroom':'ベッドルーム','sp.bath':'バスルーム','sp.overview':'フロアプラン',
    'nav.foyer':'玄関','nav.living':'リビング','nav.dining':'ダイニング','nav.bedroom':'寝室','nav.bath':'バス','nav.overview':'全体図',
    'scene.welcome':'ウェルカム','scene.day':'デイ','scene.evening':'イブニング','scene.turndown':'ターンダウン','scene.sleep':'スリープ',
    'ui.scenes':'照明シーン','ui.tour':'自動ツアー','ui.sound':'サウンド','ui.gyro':'ジャイロ','ui.hq':'高画質','ui.sq':'標準画質','ui.info':'客室情報',
-   'ui.area':'広さ','ui.bed':'ベッド','ui.guests':'定員','ui.view':'眺望','ui.floor':'階','ui.viewv':'南山・市街パノラマ','ui.book':'この客室を予約','ui.closer':'近くで見る','ui.close':'閉じる',
+   'ui.area':'広さ','ui.bed':'ベッド','ui.guests':'定員','ui.view':'眺望','ui.floor':'チェックイン / アウト','ui.viewv':'シティビュー','ui.book':'この客室を予約','ui.closer':'近くで見る','ui.close':'閉じる',
    'ui.hint':'ドラッグ — 見回す · ホイール — ズーム · WASD — 移動<br>床をダブルクリック — その位置へ · ＋ — アメニティ情報',
    'ui.bookToast':'予約ページへ移動します（提案用デモ）','ui.gyroNo':'このプレビューではモーションセンサーを使用できません。ホテルサイトでは動作します。','ui.welcome':'ようこそ',
-   'ui.am':['キングベッド','レインシャワー','独立型バスタブ','ウォークインクローゼット','ミニバー · コーヒー','ワークデスク','8名ダイニング','南山ビュー'] },
+   'ui.am':['スーパープレミアム寝具 (Simmons)','Gastaldi エジプト綿リネン','LG スタイラー','75インチ UHD TV','ミニバー · コーヒー & ティー','高速インターネット無料','La Cime ラウンジ','シティビュー'] },
  zh:{ 'sp.foyer':'玄关 · 衣帽间','sp.living':'客厅','sp.dining':'餐厅','sp.bedroom':'卧室','sp.bath':'浴室','sp.overview':'平面图',
    'nav.foyer':'玄关','nav.living':'客厅','nav.dining':'餐厅','nav.bedroom':'卧室','nav.bath':'浴室','nav.overview':'平面图',
    'scene.welcome':'迎宾','scene.day':'日间','scene.evening':'傍晚','scene.turndown':'开夜床','scene.sleep':'睡眠',
    'ui.scenes':'灯光场景','ui.tour':'自动导览','ui.sound':'声音','ui.gyro':'陀螺仪','ui.hq':'高画质','ui.sq':'标准画质','ui.info':'客房信息',
-   'ui.area':'面积','ui.bed':'床型','ui.guests':'入住人数','ui.view':'景观','ui.floor':'楼层','ui.viewv':'南山与城市全景','ui.book':'预订此客房','ui.closer':'近距离查看','ui.close':'关闭',
+   'ui.area':'面积','ui.bed':'床型','ui.guests':'入住人数','ui.view':'景观','ui.floor':'入住 / 退房','ui.viewv':'城市景观','ui.book':'预订此客房','ui.closer':'近距离查看','ui.close':'关闭',
    'ui.hint':'拖动 — 环视 · 滚轮 — 缩放 · WASD — 移动<br>双击地面 — 移动到该处 · ＋ — 设施信息',
    'ui.bookToast':'将跳转至预订页面（提案演示）','ui.gyroNo':'此预览中无法使用运动传感器，发布到酒店网站后即可使用。','ui.welcome':'欢迎',
-   'ui.am':['特大床','雨淋花洒','独立式浴缸','步入式衣帽间','迷你吧 · 咖啡','办公桌','8人餐厅','南山景观'] },
+   'ui.am':['超高级床垫系统 (Simmons)','Gastaldi 埃及棉床品','LG Styler 衣物护理机','75英寸 UHD 电视','迷你吧 · 咖啡与茶','免费高速网络','La Cime 行政酒廊','城市景观'] },
 };
 // hotspot copy — generic placeholders, swap in the hotel's real specs
 const HS_TEXT = {
- entry:  { ko:['스마트 도어 & 프라이버시 패널','키카드 하나로 객실 전원과 조명이 켜지고, 방해 금지·청소 요청을 버튼 하나로 알립니다.'], en:['Smart door & privacy panel','A single key card powers the room, and do-not-disturb or make-up-room is one touch away.'], ja:['スマートドア & プライバシーパネル','キーカード1枚で電源と照明が入り、「起こさないで」「清掃依頼」もワンタッチ。'], zh:['智能门锁与隐私面板','一张房卡即可启动客房电源与灯光，一键设置请勿打扰或请即打扫。'] },
- closet: { ko:['워크인 클로짓','가운과 슬리퍼, 개인 금고, 러기지 벤치, 전신 거울을 갖춘 드레스룸입니다.'], en:['Walk-in closet','A dressing area with robes, slippers, an in-room safe, a luggage bench and a full-length mirror.'], ja:['ウォークインクローゼット','バスローブ、スリッパ、セーフティボックス、ラゲッジベンチ、全身鏡を備えたドレッシングエリア。'], zh:['步入式衣帽间','配备浴袍、拖鞋、保险箱、行李凳与全身镜的更衣区。'] },
- view:   { ko:['남산 파노라마 뷰','바닥부터 천장 가까이 이어지는 창으로 N서울타워와 도심 스카이라인이 펼쳐집니다.'], en:['Namsan panorama','Tall windows frame N Seoul Tower and the city skyline.'], ja:['南山パノラマビュー','大きな窓からNソウルタワーと街のスカイラインを一望。'], zh:['南山全景','高大的窗户将N首尔塔与城市天际线尽收眼底。'] },
+ entry:   { ko:['La Cime 라운지 혜택','조식 06:30–10:00, 애프터눈 티 15:00–17:00, 해피아워 18:00–20:00, 미팅룸 2시간 무료 이용(6·12인실).'], en:['La Cime lounge access','Breakfast 06:30–10:00, afternoon tea 15:00–17:00, happy hour 18:00–20:00, and a meeting room free for two hours.'], ja:['La Cime ラウンジ特典','朝食 06:30–10:00、アフタヌーンティー 15:00–17:00、ハッピーアワー 18:00–20:00、ミーティングルーム2時間無料。'], zh:['La Cime 行政酒廊礼遇','早餐 06:30–10:00，下午茶 15:00–17:00，欢乐时光 18:00–20:00，会议室免费使用2小时。'] },
+ closet:  { ko:['드레스룸 & LG 스타일러','LG 스타일러와 목욕 가운, 슬리퍼, 개인 금고, 구둣주걱을 갖춘 드레스룸입니다.'], en:['Dressing room & LG Styler','An LG Styler with robes, slippers, an in-room safe and a shoehorn.'], ja:['ドレスルーム & LG スタイラー','LG スタイラー、バスローブ、スリッパ、金庫、靴べらを備えたドレスルーム。'], zh:['衣帽间 & LG Styler','配有 LG Styler 衣物护理机、浴袍、拖鞋、保险箱与鞋拔。'] },
+ view:    { ko:['서울 도심 시티 뷰','대형 유리창을 통해 서울 시내를 한눈에 내려다볼 수 있습니다.'], en:['City view','Large windows look out over the heart of Seoul.'], ja:['シティビュー','大きな窓からソウル都心を一望できます。'], zh:['城市景观','透过大型落地窗俯瞰首尔市中心。'] },
  lounge: { ko:['라운지 & 크리스털 샹들리에','최대 6인이 머물 수 있는 응접 공간. 마블 커피 테이블과 블랙 쉐이드 샹들리에.'], en:['Lounge','Seating for up to six beneath a black-shade chandelier, around a marble coffee table.'], ja:['ラウンジ','最大6名がくつろげる応接スペース。大理石のコーヒーテーブルとブラックシェードのシャンデリア。'], zh:['会客区','可容纳六人的会客空间，配大理石咖啡桌与黑色灯罩吊灯。'] },
  dining: { ko:['8인 프라이빗 다이닝','인룸 다이닝과 셰프 서비스를 이용할 수 있는 8인 테이블입니다.'], en:['Private dining for eight','An eight-seat table for in-room dining and private chef service.'], ja:['8名用プライベートダイニング','インルームダイニングやシェフサービスに対応する8名用テーブル。'], zh:['八人私享餐厅','可享用客房送餐与私厨服务的八人餐桌。'] },
  lattice:{ ko:['전통 창살 모티프 월','한옥 창살에서 영감을 받은 입체 패널에 간접조명이 비칩니다.'], en:['Lattice feature wall','A sculpted panel inspired by traditional Korean window lattice, washed with soft light.'], ja:['伝統格子モチーフの壁','韓屋の窓格子に着想を得た立体パネルを間接照明が照らします。'], zh:['传统窗棂主题墙','灵感源自韩屋窗棂的立体墙板，辅以柔和洗墙灯。'] },
- minibar:{ ko:['미니바 & 커피 스테이션','캡슐 커피 머신, 프리미엄 티 셀렉션, 와인 냉장고와 글라스웨어.'], en:['Minibar & coffee station','Capsule coffee machine, premium tea selection, wine fridge and glassware.'], ja:['ミニバー & コーヒーステーション','カプセル式コーヒーマシン、厳選ティー、ワインセラー、グラス類。'], zh:['迷你吧与咖啡台','胶囊咖啡机、精选茶品、酒柜与玻璃器皿。'] },
- bed:    { ko:['킹 베드 & 필로우 메뉴','구스다운 침구와 원하는 경도를 고를 수 있는 필로우 메뉴를 제공합니다.'], en:['King bed & pillow menu','Goose-down bedding with a pillow menu to choose your preferred firmness.'], ja:['キングベッド & ピローメニュー','グースダウンの寝具と、好みの硬さを選べるピローメニュー。'], zh:['特大床与枕头菜单','鹅绒床品，并可按喜好选择枕头软硬度。'] },
+ minibar: { ko:['미니바 & 커피·티 메이커','미니바와 커피·티 메이커, 티포트, 매일 2병의 무료 생수를 준비했습니다.'], en:['Minibar & coffee and tea','A minibar, coffee and tea maker, tea pot, and two complimentary bottles of water daily.'], ja:['ミニバー & コーヒー・ティーメーカー','ミニバー、コーヒー・ティーメーカー、ティーポット、毎日2本の無料ミネラルウォーター。'], zh:['迷你吧 & 咖啡茶具','迷你吧、咖啡与茶具、茶壶，每日免费提供两瓶饮用水。'] },
+ bed:     { ko:['슈퍼프리미엄 베딩 시스템','Simmons와 공동 개발한 침대에 이탈리아 Gastaldi의 이집트 코튼 침구를 더했습니다.'], en:['Super-premium bedding','A bed co-developed with Simmons, dressed in Gastaldi Egyptian cotton linens made in Italy.'], ja:['スーパープレミアム寝具','Simmons と共同開発したベッドに、イタリア Gastaldi のエジプト綿リネン。'], zh:['超高级床垫系统','与 Simmons 联合开发的床垫，搭配意大利 Gastaldi 埃及棉床品。'] },
  panel:  { ko:['객실 조명 패널','웰컴부터 슬립까지, 하나의 패널로 객실 조명과 커튼을 시나리오별로 바꿉니다.'], en:['In-room lighting panel','From welcome to sleep, one panel changes the lights and curtains by scene.'], ja:['客室照明パネル','ウェルカムからスリープまで、照明とカーテンをシーンごとに切り替え。'], zh:['客房灯光面板','从迎宾到睡眠，一个面板即可按场景切换灯光与窗帘。'] },
- desk:   { ko:['업무 데스크','무선 충전, 데스크 전원, 고속 Wi-Fi와 인체공학 체어를 갖췄습니다.'], en:['Work desk','Wireless charging, desk power, high-speed Wi-Fi and an ergonomic chair.'], ja:['ワークデスク','ワイヤレス充電、デスク電源、高速Wi-Fi、人間工学チェア。'], zh:['办公桌','配备无线充电、桌面电源、高速Wi-Fi与人体工学座椅。'] },
+ desk:    { ko:['업무 데스크','유선·와이파이 초고속 인터넷을 무료로 제공하고, 보이스 메일 서비스를 이용할 수 있습니다.'], en:['Work desk','Free high-speed wired and Wi-Fi internet, with voice mail service.'], ja:['ワークデスク','有線・Wi-Fi の高速インターネット無料、ボイスメールサービス付き。'], zh:['办公桌','免费高速有线及无线网络，并提供语音信箱服务。'] },
  nook:   { ko:['리딩 코너','큐레이션된 북 셀렉션과 독서등, 암체어가 있는 조용한 코너입니다.'], en:['Reading nook','A quiet corner with a curated library, reading lamp and armchair.'], ja:['リーディングコーナー','厳選された本と読書灯、アームチェアのある静かなコーナー。'], zh:['阅读角','配有精选藏书、阅读灯与扶手椅的静谧角落。'] },
- tub:    { ko:['남산 뷰 욕조','창가 프리스탠딩 욕조에서 도시 야경을 바라보며 반신욕을 즐길 수 있습니다.'], en:['Bath with a view','A freestanding tub by the window, facing the city lights.'], ja:['ビューバス','窓辺の独立型バスタブから街の夜景を眺めて。'], zh:['观景浴缸','窗边的独立式浴缸，可边泡澡边欣赏城市夜景。'] },
+ tub:    { ko:['시티 뷰 욕조','창가 프리스탠딩 욕조에서 도시 야경을 바라보며 반신욕을 즐길 수 있습니다.'], en:['Bath with a view','A freestanding tub by the window, facing the city lights.'], ja:['ビューバス','窓辺の独立型バスタブから街の夜景を眺めて。'], zh:['观景浴缸','窗边的独立式浴缸，可边泡澡边欣赏城市夜景。'] },
  shower: { ko:['레인 샤워','천장형 레인 샤워와 핸드 샤워, 대리석 벤치가 있는 유리 부스입니다.'], en:['Rain shower','A glass enclosure with ceiling rain head, hand shower and marble bench.'], ja:['レインシャワー','天井埋め込みのレインシャワー、ハンドシャワー、大理石ベンチ付き。'], zh:['雨淋花洒','配有顶喷花洒、手持花洒与大理石长凳的玻璃淋浴间。'] },
- vanity: { ko:['더블 베니티 & 어메니티','두 개의 세면대와 백라이트 거울, 시그니처 어메니티를 준비했습니다.'], en:['Double vanity & amenities','Twin basins, backlit mirrors and signature bath amenities.'], ja:['ダブルシンク & アメニティ','2つの洗面ボウル、バックライトミラー、シグネチャーアメニティ。'], zh:['双洗手台与洗浴用品','双台盆、背光镜与品牌洗浴用品。'] },
+ vanity:  { ko:['베니티 & 욕실 어메니티','욕실 어메니티와 목욕 가운, 헤어드라이어, 비데. Re:think 캠페인으로 일회용 칫솔·면도기는 제공하지 않습니다.'], en:['Vanity & bath amenities','Bath amenities, robes, hair dryer and bidet. Single-use toothbrushes and razors are not provided under the Re:think campaign.'], ja:['洗面台 & バスアメニティ','バスアメニティ、バスローブ、ヘアドライヤー、ビデ。Re:think キャンペーンにより使い捨て歯ブラシ・カミソリは提供していません。'], zh:['洗手台 & 卫浴用品','卫浴用品、浴袍、吹风机与智能马桶。响应 Re:think 环保活动，不提供一次性牙刷与剃须刀。'] },
 };
 
 
 Object.assign(I18N.ko,{ 'ui.plan':'평면도','ui.tourStart':'가이드 투어','ui.explore':'직접 둘러보기','ui.quality':'화질','ui.fs':'전체화면','ui.perf':'성능 정보','ui.exit':'투어 종료','ui.bookShort':'예약',
   'ui.hintShort':'드래그로 둘러보고, 바닥을 더블클릭하면 이동합니다. ＋를 누르면 어메니티 정보가 열립니다.','ui.hqv':'고화질','ui.sqv':'표준',
   'load.tex':'재질을 준비하고 있습니다','load.arch':'공간을 구성하고 있습니다','load.furn':'가구를 배치하고 있습니다','load.light':'조명을 맞추고 있습니다','load.shader':'렌더링을 준비하고 있습니다',
-  'tour.foyer':'문을 열면 펜던트 조명과 워크인 클로짓이 먼저 맞이합니다.','tour.living':'남산을 향한 두 개의 창과 6인 라운지가 있는 거실입니다.','tour.dining':'8인 테이블과 한옥 창살 모티프 월, 미니바를 갖춘 다이닝입니다.',
+  'tour.foyer':'문을 열면 펜던트 조명과 워크인 클로짓이 먼저 맞이합니다.','tour.living':'서울 도심을 향한 대형 창과 6인 라운지가 있는 거실입니다.','tour.dining':'8인 테이블과 한옥 창살 모티프 월, 미니바를 갖춘 다이닝입니다.',
   'tour.bedroom':'해가 지면 객실은 따뜻한 간접조명의 이브닝 모드로 바뀝니다.','tour.bath':'대리석 욕실에는 창가 욕조와 레인 샤워, 더블 베니티가 있습니다.','tour.turndown':'턴다운 서비스 — 커튼이 닫히고 침구가 정돈되며 슬리퍼가 준비됩니다.','tour.end':'약 {area}㎡의 스위트 전체를 한눈에 봅니다.' });
 Object.assign(I18N.en,{ 'ui.plan':'Floor plan','ui.tourStart':'Guided tour','ui.explore':'Explore freely','ui.quality':'Quality','ui.fs':'Full screen','ui.perf':'Performance','ui.exit':'End tour','ui.bookShort':'Book',
   'ui.hintShort':'Drag to look around and double-click the floor to move. Tap ＋ for amenity details.','ui.hqv':'High','ui.sqv':'Standard',
   'load.tex':'Preparing materials','load.arch':'Building the rooms','load.furn':'Placing the furniture','load.light':'Setting the lights','load.shader':'Preparing the renderer',
-  'tour.foyer':'Step inside to a pendant-lit foyer and a walk-in closet.','tour.living':'The living room: two windows facing Namsan and a lounge for six.','tour.dining':'Dining for eight, a lattice feature wall and the minibar.',
+  'tour.foyer':'Step inside to a pendant-lit foyer and a walk-in closet.','tour.living':'The living room: large windows over central Seoul and a lounge for six.','tour.dining':'Dining for eight, a lattice feature wall and the minibar.',
   'tour.bedroom':'As the sun sets, the room shifts to warm evening lighting.','tour.bath':'The marble bathroom has a window-side tub, rain shower and twin vanity.','tour.turndown':'Turndown — curtains close, the bed is turned down, slippers set out.','tour.end':'The whole {area} m² suite at a glance.' });
 Object.assign(I18N.ja,{ 'ui.plan':'フロアプラン','ui.tourStart':'ガイドツアー','ui.explore':'自由に見る','ui.quality':'画質','ui.fs':'全画面','ui.perf':'パフォーマンス','ui.exit':'ツアー終了','ui.bookShort':'予約',
   'ui.hintShort':'ドラッグで見回し、床をダブルクリックで移動。＋でアメニティ情報を表示します。','ui.hqv':'高','ui.sqv':'標準',
   'load.tex':'素材を準備しています','load.arch':'空間を構成しています','load.furn':'家具を配置しています','load.light':'照明を調整しています','load.shader':'レンダリングを準備しています',
-  'tour.foyer':'扉を開けると、ペンダント照明とウォークインクローゼットがお迎えします。','tour.living':'南山に面した2つの窓と6名のラウンジがあるリビング。','tour.dining':'8名用テーブル、格子モチーフの壁、ミニバーを備えたダイニング。',
+  'tour.foyer':'扉を開けると、ペンダント照明とウォークインクローゼットがお迎えします。','tour.living':'ソウル都心を望む大きな窓と6名のラウンジがあるリビング。','tour.dining':'8名用テーブル、格子モチーフの壁、ミニバーを備えたダイニング。',
   'tour.bedroom':'日が暮れると、客室は温かな間接照明のイブニングモードに。','tour.bath':'大理石のバスルームには窓辺のバスタブ、レインシャワー、ダブルシンク。','tour.turndown':'ターンダウン — カーテンが閉まり、寝具が整い、スリッパが用意されます。','tour.end':'約{area}㎡のスイート全体を一望。' });
 Object.assign(I18N.zh,{ 'ui.plan':'平面图','ui.tourStart':'导览','ui.explore':'自由浏览','ui.quality':'画质','ui.fs':'全屏','ui.perf':'性能信息','ui.exit':'结束导览','ui.bookShort':'预订',
   'ui.hintShort':'拖动环视，双击地面移动，点击＋查看设施信息。','ui.hqv':'高','ui.sqv':'标准',
   'load.tex':'正在准备材质','load.arch':'正在构建空间','load.furn':'正在布置家具','load.light':'正在调整灯光','load.shader':'正在准备渲染',
-  'tour.foyer':'推门而入，吊灯与步入式衣帽间率先迎接您。','tour.living':'客厅拥有两扇面向南山的窗户和六人会客区。','tour.dining':'配有八人餐桌、窗棂主题墙与迷你吧的餐厅。',
+  'tour.foyer':'推门而入，吊灯与步入式衣帽间率先迎接您。','tour.living':'客厅拥有俯瞰首尔市中心的大型窗户和六人会客区。','tour.dining':'配有八人餐桌、窗棂主题墙与迷你吧的餐厅。',
   'tour.bedroom':'日落之后，客房切换为温暖的傍晚灯光模式。','tour.bath':'大理石浴室配有窗边浴缸、雨淋花洒与双洗手台。','tour.turndown':'开夜床服务 — 窗帘闭合、床品整理、拖鞋备好。','tour.end':'一览约{area}㎡的整套套房。' });
 let LANG = 'ko';
 const t = k => (I18N[LANG][k] ?? I18N.en[k] ?? k);
@@ -1366,6 +1368,7 @@ gtao.updatePdMaterial({ lumaPhi:10, depthPhi:2, normalPhi:3, radius:6, rings:2, 
 gtao.blendIntensity = .85;
 { const ss=gtao.setSize.bind(gtao); gtao.setSize=(w,h)=>ss(Math.max(1,w>>1),Math.max(1,h>>1)); }  // AO at half resolution
 composer.addPass(gtao);
+const bokeh = new BokehPass(scene,camera,{ focus:3, aperture:.0018, maxblur:.0042 }); bokeh.enabled=false; composer.addPass(bokeh);
 const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight), .2, .38, 1.35);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
@@ -1436,9 +1439,9 @@ const VIEWS = {
   overview:{ p:[0.6,19.5,15.5],  t:[0.6,0,2.0] },
 };
 const TOUR = [
-  { v:'foyer',   sc:'welcome', cap:['sp.foyer','tour.foyer'] },
+  { v:'foyer',   sc:'welcome', hold:1, cap:['sp.foyer','tour.foyer'] },
   { hs:'closet' },
-  { v:'living',  cap:['sp.living','tour.living'] },
+  { v:'living',  sc:'welcome', cap:['sp.living','tour.living'] },
   { hs:'view',   sc:'day' },
   { v:'dining',  cap:['sp.dining','tour.dining'] },
   { hs:'minibar' },
@@ -1450,14 +1453,29 @@ const TOUR = [
   { v:'overview',sc:'welcome', cap:['sp.overview','tour.end'] },
 ];
 // walkable areas: rooms (inset from walls) + the doorways between them
-const WALK=[ [-9,-4,-3,3], [-4,4,-3,3], [4,10,-3,3], [FX0,FX1,3,FZ1], [BX0,X1,3,BZ1] ].map(([a,b,c,d])=>[a+.3,b-.3,c+.3,d-.3]);
+const ROOMR=[ [-9,-4,-3,3], [-4,4,-3,3], [4,10,-3,3], [FX0,FX1,3,FZ1], [BX0,X1,3,BZ1] ];
+const WALK=ROOMR.map(([a,b,c,d])=>[a+.3,b-.3,c+.3,d-.3]);
 const DOORS=[ [-4.5,-3.5,-2.0,2.0], [3.5,4.5,-2.45,-1.75], [-3.45,-2.75,2.5,3.5], [6.85,7.45,2.5,3.5] ];
 const walkable=(x,z)=> WALK.some(([a,b,c,d])=>x>=a&&x<=b&&z>=c&&z<=d) || DOORS.some(([a,b,c,d])=>x>=a&&x<=b&&z>=c&&z<=d);
+const roomOf=(x,z)=>ROOMR.findIndex(([a,b,c,d])=>x>=a&&x<=b&&z>=c&&z<=d);
+const roomIn=(x,z)=>ROOMR.findIndex(([a,b,c,d])=>x>a&&x<b&&z>c&&z<d);   // strict: door probes must not sit on a shared wall line
+const DOORG=DOORS.map(([a,b,c,d])=>{ const cx=(a+b)/2, cz=(c+d)/2; for(const n of [[1,0],[0,1]]){ const r1=roomIn(cx-n[0]*.9,cz-n[1]*.9), r2=roomIn(cx+n[0]*.9,cz+n[1]*.9); if(r1>=0&&r2>=0&&r1!==r2) return {c:[cx,cz],n,r:[r1,r2]}; } return null; }).filter(Boolean);
+// waypoints through doorways (BFS over rooms) so the camera walks through doors instead of walls
+function routeVia(p0,p1){ const a=roomOf(p0.x,p0.z), b=roomOf(p1.x,p1.z); if(a<0||b<0||a===b||p0.y>3||p1.y>3) return null;
+  const prev={[a]:null}, q=[a]; while(q.length){ const r=q.shift(); if(r===b) break; for(const d of DOORG){ const k=d.r.indexOf(r); if(k<0) continue; const o=d.r[1-k]; if(o in prev) continue; prev[o]={r,d,s:k===0?1:-1}; q.push(o); } }
+  if(!(b in prev)) return null; const hops=[]; for(let r=b; prev[r]; r=prev[r].r) hops.unshift(prev[r]);
+  const pts=[p0.clone()], n=hops.length; hops.forEach((h,i)=>{ const y=THREE.MathUtils.lerp(p0.y,p1.y,(i+1)/(n+1)); const [cx,cz]=h.d.c, [nx,nz]=h.d.n;
+    pts.push(new THREE.Vector3(cx-nx*h.s*.75,y,cz-nz*h.s*.75), new THREE.Vector3(cx+nx*h.s*.75,y,cz+nz*h.s*.75)); });
+  pts.push(p1.clone()); return pts; }
 const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ================= camera ================= */
 let tween=null;
-function flyTo(p,tg,dur=2){ tween={ p0:camera.position.clone(), t0:controls.target.clone(), p1:new THREE.Vector3(...p), t1:new THREE.Vector3(...tg), s:performance.now(), d:(RM?.05:dur)*1000 }; needsRender=Math.max(needsRender,2); }
+function flyTo(p,tg,dur=2,done=null,delay=0){ const p0=camera.position.clone(), p1=new THREE.Vector3(...p); let curve=null, d=dur;
+  const pts=RM? null : routeVia(p0,p1); if(pts){ curve=new THREE.CatmullRomCurve3(pts,false,'centripetal',.5); d=THREE.MathUtils.clamp(curve.getLength()/1.55, dur, 7); }
+  tween={ p0, t0:controls.target.clone(), p1, t1:new THREE.Vector3(...tg), curve, s:performance.now()+delay, d:(RM?.05:d)*1000, done }; needsRender=Math.max(needsRender,2); }
+const _fw=new THREE.Vector3(), _la=new THREE.Vector3(), _tg=new THREE.Vector3();
+const smooth5=k=>k*k*k*(k*(6*k-15)+10), sstep=(a,b,x)=>{ const t=Math.min(1,Math.max(0,(x-a)/(b-a))); return t*t*(3-2*t); };
 let ignoreHash=false;
 function go(key, dur=2.0){ const v=VIEWS[key]; if(!v) return; flyTo(v.p,v.t,dur); if(ALL_ZONES.includes(key)||key==='overview'){ if(location.hash.slice(1)!==key){ ignoreHash=true; try{ location.hash=key; }catch(e){} } } }
 addEventListener('hashchange',()=>{ if(ignoreHash){ ignoreHash=false; return; } const k=location.hash.slice(1); if(VIEWS[k]){ stopTour(); closeCard(); go(k); } });
@@ -1485,7 +1503,7 @@ function renderText(){
   document.querySelectorAll('[data-i]').forEach(el=>{ el.innerHTML=t(el.dataset.i); });
   $('hotel').textContent = cfg(CONFIG.hotel)+' · '+cfg(CONFIG.city); $('roomName').textContent = cfg(CONFIG.room);
   if($('introHotel')){ $('introHotel').textContent=$('hotel').textContent; $('introRoom').textContent=cfg(CONFIG.room); }
-  $('iArea').textContent = CONFIG.area+' ㎡'; $('iBed').textContent=CONFIG.bed; $('iGuests').textContent=CONFIG.guests; $('iFloor').textContent=CONFIG.floor; $('iView').textContent=t('ui.viewv');
+  $('iArea').textContent = CONFIG.area+' ㎡'; $('iBed').textContent=cfg(CONFIG.bed); $('iGuests').textContent=CONFIG.guests; $('iFloor').textContent=CONFIG.floor; $('iView').textContent=t('ui.viewv');
   $('infoToggle').innerHTML = `<span class="rnm">${cfg(CONFIG.room)} · </span><b>${CONFIG.area}㎡</b>`;
   $('chips').innerHTML = t('ui.am').map(a=>`<span>${a}</span>`).join('');
   $('mHQ').querySelector('.v').textContent = HQ? t('ui.hqv'):t('ui.sqv');
@@ -1520,13 +1538,13 @@ function occluded(p){ occRay.origin.copy(camera.position); occRay.direction.subV
   for(const b of OCC){ if(occRay.intersectBox(b,occHit) && occHit.distanceTo(camera.position)<d-.15) return true; } return false; }
 
 // guided tour
-let touring=false, tourI=0, tourT0=0, tourPaused=false, tourElapsed=0; const STEP_MS=8000;
+let touring=false, tourI=0, tourT0=0, tourPaused=false, tourElapsed=0; const STEP_MS=6000;
 function stepInfo(s){ if(s.hs){ const h=hsEls.find(x=>x.id===s.hs); return { title:HS_TEXT[s.hs][LANG][0], desc:HS_TEXT[s.hs][LANG][1], p:h.v.p, t:h.v.t, zone:h.z }; }
   const v=VIEWS[s.v]; return { title:t(s.cap[0]), desc:t(s.cap[1]).replace('{area}',CONFIG.area), p:v.p, t:v.t }; }
 function showStep(i,fly=true){ tourI=(i+TOUR.length)%TOUR.length; const s=TOUR[tourI], inf=stepInfo(s);
   $('capStep').textContent=`${tourI+1} / ${TOUR.length}`; $('cap').classList.remove('min'); clearTimeout(showStep.t); showStep.t=setTimeout(()=>$('cap').classList.add('min'),4500); $('capT').textContent=inf.title; $('capD').textContent=inf.desc;
   $('tProg').innerHTML=TOUR.map((_,k)=>`<i class="${k<tourI?'done':''}">${k===tourI?'<b></b>':''}</i>`).join('');
-  if(fly){ if(s.sc) setScene(s.sc); flyTo(inf.p,inf.t,2.6); if(s.hs==='tub') playWater(); tourElapsed=0; } }
+  if(fly){ if(s.sc){ setScene(s.sc); if(s.hold){ ST.curtain=1; } } flyTo(inf.p,inf.t,2.6); if(s.hs==='tub') playWater(); tourElapsed=0; } }
 function startTour(){ closeCard(); $('info').classList.remove('open'); touring=true; tourPaused=false; document.body.classList.add('touring'); $('tPlay').textContent='❚❚'; showStep(0); }
 function stopTour(){ if(!touring) return; touring=false; document.body.classList.remove('touring'); }
 function pauseTour(){ if(touring && !tourPaused){ tourPaused=true; $('tPlay').textContent='▶'; } }
@@ -1587,19 +1605,27 @@ let lastZone=null, frames=0, rendered=0, lastRenderT=0, fpsS=[], perfT=0, adapti
 function frame(){
   if(benching){ requestAnimationFrame(frame); return; }
   const dt=Math.min(clock.getDelta(),.1), now=performance.now();
-  if(tween){ const k=Math.min(1,(now-tween.s)/tween.d); const e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
-    camera.position.lerpVectors(tween.p0,tween.p1,e); controls.target.lerpVectors(tween.t0,tween.t1,e); if(k>=1) tween=null; needsRender=Math.max(needsRender,2); }
+  if(tween){ const k=Math.min(1,Math.max(0,(now-tween.s)/tween.d));
+    if(tween.curve){ const u=smooth5(k); tween.curve.getPointAt(u,camera.position); tween.curve.getPointAt(Math.min(1,u+.07),_la);
+      _fw.subVectors(_la,camera.position); _fw.y=0; if(_fw.lengthSq()<1e-6) _fw.subVectors(tween.t1,camera.position); _fw.normalize();
+      _tg.copy(camera.position).addScaledVector(_fw,3); _tg.y=camera.position.y-.2;           // look where we're walking
+      _tg.lerp(tween.t0,1-sstep(0,.22,u)).lerp(tween.t1,sstep(.6,1,u)); controls.target.copy(_tg); }
+    else { const e=k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2; camera.position.lerpVectors(tween.p0,tween.p1,e); controls.target.lerpVectors(tween.t0,tween.t1,e); }
+    if(k>=1){ const f=tween.done; tween=null; f&&f(); } needsRender=Math.max(needsRender,2); }
+  // depth of field: only while a guided-tour shot is held still (HQ only)
+  { const want = touring && HQ && !tween && !motionLOD; if(want){ const fd=camera.position.distanceTo(controls.target), u=bokeh.uniforms.focus; if(!bokeh.enabled){ u.value=fd; } else if(Math.abs(u.value-fd)>.01){ u.value+=(fd-u.value)*Math.min(1,dt*4); needsRender=Math.max(needsRender,1); } }
+    if(want!==bokeh.enabled){ bokeh.enabled=want; needsRender=Math.max(needsRender,2); } }
   const fw=(keys['w']||keys['arrowup']?1:0)-(keys['s']||keys['arrowdown']?1:0), st=(keys['d']||keys['arrowright']?1:0)-(keys['a']||keys['arrowleft']?1:0);
   if(fw||st){ tween=null; pauseTour(); const f=tmp.subVectors(controls.target,camera.position); f.y=0; f.normalize(); const r=new THREE.Vector3(-f.z,0,f.x); const mv=f.multiplyScalar(fw*2.2*dt).addScaledVector(r,st*2.2*dt); const cp=camera.position;
     if(cp.y<3 && walkable(cp.x,cp.z) && !walkable(cp.x+mv.x,cp.z+mv.z)){ if(walkable(cp.x+mv.x,cp.z)) mv.z=0; else if(walkable(cp.x,cp.z+mv.z)) mv.x=0; else mv.set(0,0,0); }
     camera.position.add(mv); controls.target.add(mv); needsRender=2; }
   if(gyro && gyroBase===null && gyro.a){ gyroBase={a:gyro.a,b:gyro.b,t:controls.target.clone()}; }
   if(gyro && gyroBase){ const yaw=THREE.MathUtils.degToRad(((gyro.a-gyroBase.a+540)%360)-180), pit=THREE.MathUtils.degToRad(gyro.b-gyroBase.b)*.6; const v=gyroBase.t.clone().sub(camera.position); v.applyAxisAngle(new THREE.Vector3(0,1,0),yaw); v.y+=Math.tan(-pit)*v.length()*.5; controls.target.copy(camera.position).add(v); }
-  if(sceneMoving){ let moving=false; for(const k in ST){ const d=ST[k]-S[k]; if(Math.abs(d)>.002){ S[k]+=d*Math.min(1,dt*1.8); moving=true; } else S[k]=ST[k]; } applyScene(S); if(!moving){ sceneMoving=false; envDirty=true; } }
+  if(sceneMoving){ let moving=false; for(const k in ST){ const d=ST[k]-S[k]; if(Math.abs(d)>.002){ S[k]+=d*Math.min(1,dt*(k==='curtain'?.75:1.8)); moving=true; } else S[k]=ST[k]; } applyScene(S); if(!moving){ sceneMoving=false; envDirty=true; } }
   if(envDirty && !sceneMoving){ envDirty = captureStep(); needsRender=Math.max(needsRender,2); }
   controls.update();
   // tour timing
-  if(touring && !tourPaused){ tourElapsed+=dt*1000; const el=tourElapsed, bar=document.querySelector('#tProg b'); if(bar) bar.style.width=Math.min(100,el/STEP_MS*100)+'%'; if(el>STEP_MS){ if(tourI===TOUR.length-1){ stopTour(); $('info').classList.add('open'); } else showStep(tourI+1); } }
+  if(touring && !tourPaused && !tween){ tourElapsed+=dt*1000; const el=tourElapsed, bar=document.querySelector('#tProg b'); if(bar) bar.style.width=Math.min(100,el/STEP_MS*100)+'%'; if(el>STEP_MS){ if(tourI===TOUR.length-1){ stopTour(); $('info').classList.add('open'); } else showStep(tourI+1); } }
   const moving = !!tween || fw || st || (now-lastMove<140) || sceneMoving;
   setMotionLOD(moving);
   if(needsRender>0){
@@ -1643,12 +1669,16 @@ try{ await renderer.compileAsync(scene,camera); }catch(e){}
 await tick(100,'load.shader');
 frame();
 $('intro').classList.add('ready');
+// opening shot: curtains closed, glide from the foyer through the door while the drapes open on the view
+function opening(){ S.curtain=ST.curtain=1; applyScene(S); camera.position.set(-3.1,1.62,5.4); controls.target.set(-2.5,1.45,-3); controls.update();
+  flyTo([-1.0,1.58,1.5],[1.4,1.42,-3],5.5,null,500); setTimeout(()=>{ if(sceneKey==='welcome'){ ST.curtain=0; sceneMoving=true; } },1300); }
 function enter(withTour){
   if(!$('intro') || $('intro').classList.contains('gone')){ if(withTour) startTour(); return; }
   document.body.classList.remove('intro'); $('intro').classList.add('gone'); setTimeout(()=>$('intro').remove(),1000);
   needsRender=4;
   const idle=window.requestIdleCallback||((f)=>setTimeout(f,400)); const job=()=>{ if(paintNight(false)) idle(job); }; setTimeout(()=>idle(job),1500);
-  if(withTour) startTour(); else { let seen=false; try{ seen=localStorage.getItem('suiteHint')==='1'; localStorage.setItem('suiteHint','1'); }catch(e){} if(!seen) toast(t('ui.hintShort'),6000); }
+  if(withTour){ S.curtain=ST.curtain=1; applyScene(S); startTour(); }
+  else { if(startKey==='foyer' && !RM && sceneKey==='welcome') opening(); let seen=false; try{ seen=localStorage.getItem('suiteHint')==='1'; localStorage.setItem('suiteHint','1'); }catch(e){} if(!seen) toast(t('ui.hintShort'),6000); }
 }
 
 /* ================= built-in GPU benchmark (open with #bench) ================= */
