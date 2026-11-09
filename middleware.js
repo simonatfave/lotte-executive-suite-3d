@@ -1,6 +1,7 @@
 // FAVE Proposal Gate — reusable access-code page for client proposal demos
 // Edit only the CONFIG block below for each new proposal.
-export const config = { matcher: '/(.*)' };
+// Fonts are public (SIL OFL) and cached forever, so skip the gate for them.
+export const config = { matcher: '/((?!fonts/).*)' };
 
 const CONFIG = {
   clientName: 'LOTTE HOTEL',                     // used in title / alt text
@@ -23,7 +24,9 @@ const TOKEN_SALT = 'fave-gate-v1';
 const MAX_AGE = 60 * 60 * 24 * CONFIG.days;
 const PUBLIC = new Set(['/robots.txt', '/_gate/fave.png', CONFIG.clientLogo]);
 
-async function token() {
+let TOKEN_P;
+function token() { return (TOKEN_P ||= makeToken()); }
+async function makeToken() {
   const d = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(TOKEN_SALT + ':' + CODE));
   return [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, '0')).join('').slice(0, 40);
 }
