@@ -136,7 +136,7 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true; controls.dampingFactor = 0.055;
 controls.minDistance = 0.3; controls.maxDistance = 34;
 controls.maxPolarAngle = Math.PI * 0.94;
-controls.rotateSpeed = 0.42;
+controls.rotateSpeed = 0.35; controls.zoomSpeed = 0.6;
 
 const H = 2.95, TRAY = 2.72, T = 0.16;
 const X0=-9, X1=10, Z0=-3, Z1=3;
@@ -1476,7 +1476,7 @@ function routeVia(p0,p1){ const a=roomOf(p0.x,p0.z), b=roomOf(p1.x,p1.z); if(a<0
   const prev={[a]:null}, q=[a]; while(q.length){ const r=q.shift(); if(r===b) break; for(const d of DOORG){ const k=d.r.indexOf(r); if(k<0) continue; const o=d.r[1-k]; if(o in prev) continue; prev[o]={r,d,s:k===0?1:-1}; q.push(o); } }
   if(!(b in prev)) return null; const hops=[]; for(let r=b; prev[r]; r=prev[r].r) hops.unshift(prev[r]);
   const pts=[p0.clone()], n=hops.length; hops.forEach((h,i)=>{ const y=THREE.MathUtils.lerp(p0.y,p1.y,(i+1)/(n+1)); const [cx,cz]=h.d.c, [nx,nz]=h.d.n;
-    pts.push(new THREE.Vector3(cx-nx*h.s*.75,y,cz-nz*h.s*.75), new THREE.Vector3(cx+nx*h.s*.75,y,cz+nz*h.s*.75)); });
+    pts.push(new THREE.Vector3(cx-nx*h.s*DOOR_LEAD,y,cz-nz*h.s*DOOR_LEAD), new THREE.Vector3(cx+nx*h.s*DOOR_LEAD,y,cz+nz*h.s*DOOR_LEAD)); });
   pts.push(p1.clone()); return pts; }
 const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -1493,13 +1493,14 @@ TRACK.pv('/intro');
 let tween=null;
 function flyTo(p,tg,dur=2,done=null,delay=0){ const p0=camera.position.clone(), p1=new THREE.Vector3(...p); let curve=null, d=dur;
   if(dur>.1) d=dur*CAM_SLOW;
-  const pts=RM? null : routeVia(p0,p1); if(pts){ curve=new THREE.CatmullRomCurve3(pts,false,'centripetal',.5); d=THREE.MathUtils.clamp(curve.getLength()/1.2, d, 9.5); }
+  const pts=RM? null : routeVia(p0,p1); if(pts){ curve=new THREE.CatmullRomCurve3(pts,false,'centripetal',.5); d=THREE.MathUtils.clamp(curve.getLength()/WALK_MPS, d, WALK_MAX_S); }
   const doors = curve ? DOORLEAF.filter(dl=>curve.getSpacedPoints(60).some(q=>(q.x-dl.c[0])**2+(q.z-dl.c[1])**2<.5)) : [];
   tween={ p0, t0:controls.target.clone(), p1, t1:new THREE.Vector3(...tg), curve, doors, s:performance.now()+delay, d:(RM?.05:d)*1000, done }; needsRender=Math.max(needsRender,2); }
 const _fw=new THREE.Vector3(), _la=new THREE.Vector3(), _tg=new THREE.Vector3();
-const CAM_SLOW=1.55;
+// camera pacing (one place to tune): slow, calm hotel-walkthrough feel
+const CAM_SLOW=2.3, WALK_MPS=.72, WALK_MAX_S=13, HEAD_RATE=1.7, DOOR_LEAD=1.15;
 // walk profile: ease in, cruise, ease out (peak speed only 1.33x the average) / sine ease for in-place moves
-const trap=(k,a=.25)=>{ const v=1/(1-a); return k<a? v*k*k/(2*a) : k>1-a? 1-v*(1-k)*(1-k)/(2*a) : v*(a/2+k-a); };
+const trap=(k,a=.32)=>{ const v=1/(1-a); return k<a? v*k*k/(2*a) : k>1-a? 1-v*(1-k)*(1-k)/(2*a) : v*(a/2+k-a); };
 const easeSine=k=>-(Math.cos(Math.PI*k)-1)/2;
 const _la2=new THREE.Vector3();
 const smooth5=k=>k*k*k*(k*(6*k-15)+10), sstep=(a,b,x)=>{ const t=Math.min(1,Math.max(0,(x-a)/(b-a))); return t*t*(3-2*t); };
@@ -1640,11 +1641,11 @@ function frame(){
       if(d.slide) d.g.position.x=L(d.a,d.b,e); else d.g.rotation.y=L(d.a,d.b,e); needsRender=Math.max(needsRender,2); } }
   if(tween){ const k=Math.min(1,Math.max(0,(now-tween.s)/tween.d));
     if(tween.curve){ const u=trap(k); tween.curve.getPointAt(u,camera.position);
-      tween.curve.getPointAt(Math.min(1,u+.05),_la); tween.curve.getPointAt(Math.min(1,u+.13),_la2); _la.add(_la2).multiplyScalar(.5);   // averaged look-ahead = gentler turns
+      tween.curve.getPointAt(Math.min(1,u+.09),_la); tween.curve.getPointAt(Math.min(1,u+.22),_la2); _la.add(_la2).multiplyScalar(.5);   // averaged look-ahead = gentler turns
       _fw.subVectors(_la,camera.position); _fw.y=0; if(_fw.lengthSq()<1e-6) _fw.subVectors(tween.t1,camera.position); _fw.normalize();
       _tg.copy(camera.position).addScaledVector(_fw,3); _tg.y=camera.position.y-.2;
-      _tg.lerp(tween.t0,1-sstep(0,.25,u)).lerp(tween.t1,sstep(.55,1,u));
-      controls.target.lerp(_tg, k>.97? 1 : 1-Math.exp(-dt*3.2)); }                          // damped head turn
+      _tg.lerp(tween.t0,1-sstep(0,.3,u)).lerp(tween.t1,sstep(.5,1,u));
+      controls.target.lerp(_tg, k>.985? 1 : 1-Math.exp(-dt*HEAD_RATE)); }                          // damped head turn
     else { const e=easeSine(k); camera.position.lerpVectors(tween.p0,tween.p1,e); controls.target.lerpVectors(tween.t0,tween.t1,e); }
     if(k>=1){ const f=tween.done; tween=null; f&&f(); } needsRender=Math.max(needsRender,2); }
   // depth of field: only while a guided-tour shot is held still (HQ only)
