@@ -81,22 +81,22 @@ const HS_TEXT = {
 };
 
 
-Object.assign(I18N.ko,{ 'ui.privacy':'방문 통계 안내: 제안 후속 안내를 위해 열람 여부와 둘러본 공간을 익명 통계로 수집합니다 (Vercel Web Analytics · 추적 쿠키 없음).','ui.plan':'평면도','ui.tourStart':'가이드 투어','ui.explore':'직접 둘러보기','ui.quality':'화질','ui.fs':'전체화면','ui.perf':'성능 정보','ui.exit':'투어 종료','ui.bookShort':'예약',
+Object.assign(I18N.ko,{ 'ui.skip':'건너뛰기','ui.opening':'오프닝 연출','op.signature':'시그니처','op.welcome':'웰컴 카드','op.arrival':'도착','op.plan':'평면도','op.city':'시티 뷰','op.timelapse':'밤 → 아침','op.tl':'밤에서 아침으로, 조명 시나리오','ui.privacy':'방문 통계 안내: 제안 후속 안내를 위해 열람 여부와 둘러본 공간을 익명 통계로 수집합니다 (Vercel Web Analytics · 추적 쿠키 없음).','ui.plan':'평면도','ui.tourStart':'가이드 투어','ui.explore':'직접 둘러보기','ui.quality':'화질','ui.fs':'전체화면','ui.perf':'성능 정보','ui.exit':'투어 종료','ui.bookShort':'예약',
   'ui.hintShort':'드래그로 둘러보고, 바닥을 더블클릭하면 이동합니다. ＋를 누르면 어메니티 정보가 열립니다.','ui.hqv':'고화질','ui.sqv':'표준',
   'load.tex':'재질을 준비하고 있습니다','load.arch':'공간을 구성하고 있습니다','load.furn':'가구를 배치하고 있습니다','load.light':'조명을 맞추고 있습니다','load.shader':'렌더링을 준비하고 있습니다',
   'tour.foyer':'문을 열면 펜던트 조명과 워크인 클로짓이 먼저 맞이합니다.','tour.living':'서울 도심을 향한 대형 창과 6인 라운지가 있는 거실입니다.','tour.dining':'8인 테이블과 한옥 창살 모티프 월, 미니바를 갖춘 다이닝입니다.',
   'tour.bedroom':'해가 지면 객실은 따뜻한 간접조명의 이브닝 모드로 바뀝니다.','tour.bath':'대리석 욕실에는 창가 욕조와 레인 샤워, 더블 베니티가 있습니다.','tour.turndown':'턴다운 서비스 — 커튼이 닫히고 침구가 정돈되며 슬리퍼가 준비됩니다.','tour.end':'약 {area}㎡의 스위트 전체를 한눈에 봅니다.' });
-Object.assign(I18N.en,{ 'ui.privacy':'Visit statistics: whether this demo was opened and which spaces were viewed are collected anonymously (Vercel Web Analytics, no tracking cookies).','ui.plan':'Floor plan','ui.tourStart':'Guided tour','ui.explore':'Explore freely','ui.quality':'Quality','ui.fs':'Full screen','ui.perf':'Performance','ui.exit':'End tour','ui.bookShort':'Book',
+Object.assign(I18N.en,{ 'ui.skip':'Skip','ui.opening':'Opening','op.signature':'Signature','op.welcome':'Welcome card','op.arrival':'Arrival','op.plan':'Floor plan','op.city':'City view','op.timelapse':'Night → morning','op.tl':'From night to morning — lighting scenes','ui.privacy':'Visit statistics: whether this demo was opened and which spaces were viewed are collected anonymously (Vercel Web Analytics, no tracking cookies).','ui.plan':'Floor plan','ui.tourStart':'Guided tour','ui.explore':'Explore freely','ui.quality':'Quality','ui.fs':'Full screen','ui.perf':'Performance','ui.exit':'End tour','ui.bookShort':'Book',
   'ui.hintShort':'Drag to look around and double-click the floor to move. Tap ＋ for amenity details.','ui.hqv':'High','ui.sqv':'Standard',
   'load.tex':'Preparing materials','load.arch':'Building the rooms','load.furn':'Placing the furniture','load.light':'Setting the lights','load.shader':'Preparing the renderer',
   'tour.foyer':'Step inside to a pendant-lit foyer and a walk-in closet.','tour.living':'The living room: large windows over central Seoul and a lounge for six.','tour.dining':'Dining for eight, a lattice feature wall and the minibar.',
   'tour.bedroom':'As the sun sets, the room shifts to warm evening lighting.','tour.bath':'The marble bathroom has a window-side tub, rain shower and twin vanity.','tour.turndown':'Turndown — curtains close, the bed is turned down, slippers set out.','tour.end':'The whole {area} m² suite at a glance.' });
-Object.assign(I18N.ja,{ 'ui.privacy':'閲覧統計について：閲覧の有無と見たスペースを匿名の統計として収集します（Vercel Web Analytics・トラッキングCookieなし）。','ui.plan':'フロアプラン','ui.tourStart':'ガイドツアー','ui.explore':'自由に見る','ui.quality':'画質','ui.fs':'全画面','ui.perf':'パフォーマンス','ui.exit':'ツアー終了','ui.bookShort':'予約',
+Object.assign(I18N.ja,{ 'ui.skip':'スキップ','ui.opening':'オープニング','op.signature':'シグネチャー','op.welcome':'ウェルカムカード','op.arrival':'到着','op.plan':'フロアプラン','op.city':'シティビュー','op.timelapse':'夜 → 朝','op.tl':'夜から朝へ — 照明シーン','ui.privacy':'閲覧統計について：閲覧の有無と見たスペースを匿名の統計として収集します（Vercel Web Analytics・トラッキングCookieなし）。','ui.plan':'フロアプラン','ui.tourStart':'ガイドツアー','ui.explore':'自由に見る','ui.quality':'画質','ui.fs':'全画面','ui.perf':'パフォーマンス','ui.exit':'ツアー終了','ui.bookShort':'予約',
   'ui.hintShort':'ドラッグで見回し、床をダブルクリックで移動。＋でアメニティ情報を表示します。','ui.hqv':'高','ui.sqv':'標準',
   'load.tex':'素材を準備しています','load.arch':'空間を構成しています','load.furn':'家具を配置しています','load.light':'照明を調整しています','load.shader':'レンダリングを準備しています',
   'tour.foyer':'扉を開けると、ペンダント照明とウォークインクローゼットがお迎えします。','tour.living':'ソウル都心を望む大きな窓と6名のラウンジがあるリビング。','tour.dining':'8名用テーブル、格子モチーフの壁、ミニバーを備えたダイニング。',
   'tour.bedroom':'日が暮れると、客室は温かな間接照明のイブニングモードに。','tour.bath':'大理石のバスルームには窓辺のバスタブ、レインシャワー、ダブルシンク。','tour.turndown':'ターンダウン — カーテンが閉まり、寝具が整い、スリッパが用意されます。','tour.end':'約{area}㎡のスイート全体を一望。' });
-Object.assign(I18N.zh,{ 'ui.privacy':'访问统计说明：我们以匿名方式统计是否打开本演示及浏览的空间（Vercel Web Analytics，不使用跟踪 Cookie）。','ui.plan':'平面图','ui.tourStart':'导览','ui.explore':'自由浏览','ui.quality':'画质','ui.fs':'全屏','ui.perf':'性能信息','ui.exit':'结束导览','ui.bookShort':'预订',
+Object.assign(I18N.zh,{ 'ui.skip':'跳过','ui.opening':'开场','op.signature':'招牌','op.welcome':'欢迎卡','op.arrival':'抵达','op.plan':'平面图','op.city':'城市景观','op.timelapse':'夜 → 晨','op.tl':'从夜晚到清晨——灯光场景','ui.privacy':'访问统计说明：我们以匿名方式统计是否打开本演示及浏览的空间（Vercel Web Analytics，不使用跟踪 Cookie）。','ui.plan':'平面图','ui.tourStart':'导览','ui.explore':'自由浏览','ui.quality':'画质','ui.fs':'全屏','ui.perf':'性能信息','ui.exit':'结束导览','ui.bookShort':'预订',
   'ui.hintShort':'拖动环视，双击地面移动，点击＋查看设施信息。','ui.hqv':'高','ui.sqv':'标准',
   'load.tex':'正在准备材质','load.arch':'正在构建空间','load.furn':'正在布置家具','load.light':'正在调整灯光','load.shader':'正在准备渲染',
   'tour.foyer':'推门而入，吊灯与步入式衣帽间率先迎接您。','tour.living':'客厅拥有俯瞰首尔市中心的大型窗户和六人会客区。','tour.dining':'配有八人餐桌、窗棂主题墙与迷你吧的餐厅。',
@@ -108,7 +108,7 @@ const cfg = o => (typeof o==='object' ? (o[LANG]??o.en) : o);
 window.__stages=[]; const __t0=performance.now(); const tick = (pct,key) => { window.__stages.push([pct, Math.round(performance.now()-__t0)]); const b=document.getElementById('introBar'), l=document.getElementById('introLbl'); if(b) b.style.width=pct+'%'; if(l && key) l.textContent=t(key); return new Promise(r=>requestAnimationFrame(()=>setTimeout(r,0))); };
 document.getElementById('introHotel').textContent = cfg(CONFIG.hotel)+' · '+cfg(CONFIG.city);
 document.getElementById('introRoom').textContent = cfg(CONFIG.room);
-document.getElementById('introMeta').textContent = CONFIG.area+' ㎡ · '+CONFIG.bed+' · '+CONFIG.floor;
+document.getElementById('introMeta').textContent = CONFIG.area+' ㎡ · '+(typeof CONFIG.bed==='object'? (CONFIG.bed[document.documentElement.lang]||CONFIG.bed.ko) : CONFIG.bed);
 await tick(4,'load.tex');
 
 
@@ -614,11 +614,41 @@ function casingX(c,a,b,top){ const w=.09, out=[];
   southWalls.push(...out); }
 casingX(Z1+T/2,-3.7,-2.5,2.4); casingX(Z1+T/2,6.6,7.7,2.3); casingX(FZ1+T/2,-2.6,-1.6,2.3);
 // entry door (closed) with panels, lever, viewer, closer
-const entry=grp(-2.1,0,FZ1+T/2,0,walls); { box(.99,2.29,.05,M.walnut,0,1.145,0,entry);
+const ENTRY_LED={}, ENTRY={ k:0, tk:0 };
+const entryH=grp(-2.1-.495,0,FZ1+T/2,0,walls), entry=grp(.495,0,0,0,entryH); { box(.99,2.29,.05,M.walnut,0,1.145,0,entry);
   for(const [yy,hh] of [[.6,.85],[1.62,.95]]) for(const s of [-1,1]){ const p=grp(0,yy,s*.027,0,entry); box(.7,.018,.01,M.brassD,0,hh/2,0,p); box(.7,.018,.01,M.brassD,0,-hh/2,0,p); box(.018,hh,.01,M.brassD,-.35,0,0,p); box(.018,hh,.01,M.brassD,.35,0,0,p); }
   const lv=box(.14,.018,.02,M.brass,.32,1.02,-.06,entry); cyl(.028,.028,.02,M.brass,.39,1.02,-.035,entry).rotation.x=Math.PI/2;
   cyl(.009,.009,.02,M.brass,0,1.52,-.035,entry).rotation.x=Math.PI/2; box(.36,.04,.04,M.chrome,.22,2.2,-.05,entry);
-  southWalls.push(...entry.children); }
+  { const h2=box(.14,.018,.02,M.brass,.32,1.02,.06,entry); }
+  ENTRY_LED.mat=new THREE.MeshStandardMaterial({ color:0x220000, emissive:0xff2a18, emissiveIntensity:1.4 }); box(.03,.075,.012,M.black,.33,1.17,.045,entry); box(.012,.012,.004,ENTRY_LED.mat,.33,1.19,.052,entry);
+  entryH.traverse(o=>{ if(o.isMesh){ o.userData.noShadowCast=true; o.userData.noBake=true; } }); }
+// corridor outside the suite (only shown during the arrival opening) + exterior facade (city opening)
+const corridor=new THREE.Group(); corridor.visible=false; root.add(corridor);
+{ const cm=(c,e=0,r=.85)=>new THREE.MeshStandardMaterial({ color:c, roughness:r, emissive:c, emissiveIntensity:e });
+  const z0=FZ1+T, z1=z0+3.4, xa=-6.2, xb=2.2, Hc=2.75;
+  const carpet=(()=>{ const [c,g]=cvs(512,512); g.fillStyle='#4a3a30'; g.fillRect(0,0,512,512); g.strokeStyle='rgba(196,160,104,.55)'; g.lineWidth=5; for(let i=-512;i<1024;i+=64){ g.beginPath(); g.moveTo(i,0); g.lineTo(i+256,512); g.stroke(); g.beginPath(); g.moveTo(i+256,0); g.lineTo(i,512); g.stroke(); } return toTex(c,[5,2]); })();
+  const fl=new THREE.Mesh(new THREE.PlaneGeometry(xb-xa,z1-z0),new THREE.MeshStandardMaterial({ map:carpet, roughness:1, emissive:0x2a2018, emissiveIntensity:.35 })); fl.rotation.x=-Math.PI/2; fl.position.set((xa+xb)/2,.001,(z0+z1)/2); corridor.add(fl);
+  const wallM=cm(0xd9cdb8,.32), trimM=cm(0x5a4434,.15,.5);
+  box(xb-xa,Hc,.05,wallM,(xa+xb)/2,Hc/2,z1,corridor); box(.05,Hc,z1-z0,wallM,xa,Hc/2,(z0+z1)/2,corridor); box(.05,Hc,z1-z0,wallM,xb,Hc/2,(z0+z1)/2,corridor);
+  box(xb-xa,.04,z1-z0,cm(0xefe8dc,.55),(xa+xb)/2,Hc,(z0+z1)/2,corridor);
+  for(const [a,b] of [[xa,-2.64],[-1.56,xb]]) box(b-a,Hc,.04,wallM,(a+b)/2,Hc/2,z0+.01,corridor);   // corridor-side face of the suite wall
+  box(1.08,Hc-2.36,.04,wallM,-2.1,(Hc+2.36)/2,z0+.01,corridor);
+  for(const zz of [z0+.04,z1-.04]) box(xb-xa,.12,.02,trimM,(xa+xb)/2,.06,zz,corridor);
+  for(let x=xa+1;x<xb;x+=1.6){ const d=new THREE.Mesh(new THREE.CircleGeometry(.07,24),new THREE.MeshBasicMaterial({color:0xfff1d8})); d.rotation.x=Math.PI/2; d.position.set(x,Hc-.025,(z0+z1)/2); corridor.add(d);
+    const pool=new THREE.Mesh(new THREE.CircleGeometry(.9,32),new THREE.MeshBasicMaterial({ color:0xffd9a0, transparent:true, opacity:.10, depthWrite:false })); pool.rotation.x=-Math.PI/2; pool.position.set(x,.004,(z0+z1)/2); corridor.add(pool); }
+  for(const x of [-3.4,-.8]){ const sc=box(.12,.32,.06,new THREE.MeshBasicMaterial({color:0xffe6bf}),x,1.75,z0+.05,corridor); }
+  // suite plate
+  { const [c,g]=cvs(512,160); g.fillStyle='#b8955a'; g.fillRect(0,0,512,160); g.fillStyle='#2b2118'; g.textAlign='center'; g.font='600 40px times-new-roman, "Times New Roman", serif'; g.fillText('PRESIDENTIAL SUITE',256,72); g.font='26px "Pretendard Variable", sans-serif'; g.fillText('EXECUTIVE TOWER',256,118);
+    const pl=new THREE.Mesh(new THREE.PlaneGeometry(.42,.13),new THREE.MeshStandardMaterial({ map:toTex(c), metalness:.6, roughness:.35, emissive:0x3a2a14, emissiveIntensity:.4 })); pl.position.set(-1.25,1.52,z0+.03); corridor.add(pl); }
+  corridor.traverse(o=>{ if(o.isMesh){ o.userData.noBake=true; o.userData.noAO=true; o.castShadow=false; } });
+}
+const facade=new THREE.Group(); root.add(facade);
+{ const st=new THREE.MeshStandardMaterial({ color:0x4a4642, roughness:.6, metalness:.05, emissive:0x1a1714, emissiveIntensity:1 }), zf=Z0-T-.1, y0=-1.6, y1=4.6;   // clear of the wall boxes (outer face at Z0-T) to avoid z-fighting
+  const xs=[X0-.4, ...Object.values(WIN).flat().sort((a,b)=>a-b), X1+.4];
+  for(let i=0;i<xs.length-1;i+=2){ const a=xs[i], b=xs[i+1]; box(b-a,y1-y0,.1,st,(a+b)/2,(y0+y1)/2,zf,facade); }               // piers between windows
+  for(let i=1;i<xs.length-1;i+=2){ const a=xs[i], b=xs[i+1]; box(b-a,.55-y0,.1,st,(a+b)/2,(y0+.55)/2,zf,facade); box(b-a,y1-2.5,.1,st,(a+b)/2,(2.5+y1)/2,zf,facade); }
+  for(const yy of [-.35,3.05]) box(X1-X0+1,.16,.3,new THREE.MeshStandardMaterial({ color:0x2a2826, roughness:.5 }),(X0+X1)/2,yy,zf-.12,facade);
+  facade.traverse(o=>{ if(o.isMesh){ o.userData.noBake=true; o.userData.noShadow=true; o.userData.noShadowCast=true; } }); }
 // sliding frosted door to bath (parked open)
 const DOORLEAF=[];   // animated door leaves: they open as the camera approaches and close behind it
 { const sd=grp(7.15,0,Z1+T/2+.05,0,walls); box(1.12,2.26,.03,M.frost,0,1.14,0,sd); for(const yy of [.02,2.26]) box(1.14,.03,.035,M.brassD,0,yy,0,sd); for(const xx of [-.56,.56]) box(.03,2.26,.035,M.brassD,xx,1.14,0,sd); box(.02,.4,.03,M.brass,.48,1.05,-.03,sd);
@@ -1231,12 +1261,12 @@ const welcome=new THREE.Group(); root.add(welcome);
 // welcome card text (from CONFIG)
 function cardTex(lines){ const [c,g]=cvs(512,320); g.fillStyle='#f7f3ea'; g.fillRect(0,0,512,320); g.strokeStyle='#b8995c'; g.lineWidth=4; g.strokeRect(14,14,484,292);
   g.fillStyle='#3a3226'; g.textAlign='center'; g.font='44px times-new-roman, "Times New Roman", "Pretendard Variable", serif'; g.fillText(lines[0],256,140); g.font='26px "Pretendard Variable", "Apple SD Gothic Neo", sans-serif'; g.fillStyle='#7a6a50'; g.fillText(lines[1],256,200); g.font='22px anth, "Cormorant Garamond", "Pretendard Variable", serif'; g.fillText(lines[2]||'',256,245); return toTex(c); }
-const welcomeCardMat = new THREE.MeshStandardMaterial({roughness:.6});
+const welcomeCardMat = new THREE.MeshStandardMaterial({roughness:.6}); const CARD={};
 (function(){
   // fruit platter + card on the coffee table
   const p=grp(.55,.45,.48,0,welcome); lathe([[0,0],[.18,0],[.2,.025],[.19,.03],[0,.012]],M.ceramic,0,0,0,p,40);
   const fc=[0xd2482e,0xe8b23a,0x7aa33f,0xd2482e,0x8b2a5b,0xe8b23a,0xcf7a2a]; for(let i=0;i<9;i++){ const a=i*2.3, r=.09*Math.sqrt(i/9)+.02; sph(.034+Math.random()*.012,new THREE.MeshStandardMaterial({color:fc[i%7],roughness:.35}),Math.cos(a)*r,.05+(i%3)*.012,Math.sin(a)*r,p,14,10); }
-  const cdg=grp(.25,.45,.62,-.3,welcome); const f1=new THREE.Mesh(new THREE.PlaneGeometry(.16,.1),welcomeCardMat); f1.position.set(0,.048,0); f1.rotation.x=-.25; cdg.add(f1); const bk=box(.16,.1,.002,M.ceramic,0,.048,-.025,cdg); bk.rotation.x=.25;
+  const cdg=grp(.25,.45,.62,-.3,welcome); const f1=new THREE.Mesh(new THREE.PlaneGeometry(.16,.1),welcomeCardMat); f1.position.set(0,.048,0); f1.rotation.x=-.25; cdg.add(f1); CARD.mesh=f1; const bk=box(.16,.1,.002,M.ceramic,0,.048,-.025,cdg); bk.rotation.x=.25;
   // champagne bucket + flutes at the dining table
   const b=grp(-5.55,.775,.2,0,welcome); lathe([[0,0],[.08,0],[.11,.22],[.115,.23],[0,.22]],M.chrome,0,0,0,b,32);
   lathe([[0,0],[.038,0],[.038,.2],[.015,.27],[.015,.33],[0,.33]],new THREE.MeshStandardMaterial({color:0x1d3a26,roughness:.1}),0,.08,0,b,16); cyl(.017,.017,.04,M.brass,0,.42,0,b,10);
@@ -1337,7 +1367,7 @@ function collect(container, exclude, allowTransparent){
   return list;
 }
 if(!window.__noMerge){
-  const ex=new Set([...southWalls, ...DOORLEAF.map(d=>d.g), ...drapes.map(d=>d.g), ...shades.map(s=>s.g), turndown, welcome, ...floors]);
+  const ex=new Set([...southWalls, entryH, corridor, ...DOORLEAF.map(d=>d.g), ...drapes.map(d=>d.g), ...shades.map(s=>s.g), turndown, welcome, ...floors]);
   scene.updateMatrixWorld(true);
   const south=mergeInto(root, southWalls.filter(m=>m.isMesh && !m.material.transparent));
   southWalls.length=0; southWalls.push(...south);
@@ -1395,7 +1425,8 @@ const SCENES = {
 };
 let sceneKey='welcome';
 const S={...SCENES.welcome}, ST={...SCENES.welcome};
-let envDirty=true, sceneMoving=true, needsRender=8, holdRender=false;
+let envDirty=true, sceneMoving=true, needsRender=8, holdRender=false, SCENE_RATE=1;
+const CINE={ on:false, tok:0, dof:null, mode:null };   // opening-shot state (see 'opening shots')
 const L = THREE.MathUtils.lerp;
 function applyScene(s){
   const e = s.tod*s.tod*(3-2*s.tod), shut=s.curtain;
@@ -1491,9 +1522,9 @@ const TRACK=(()=>{ const pv=p=>{ try{ window.va && window.va('pageview',{ route:
 TRACK.pv('/intro');
 /* ================= camera ================= */
 let tween=null;
-function flyTo(p,tg,dur=2,done=null,delay=0){ const p0=camera.position.clone(), p1=new THREE.Vector3(...p); let curve=null, d=dur;
-  if(dur>.1) d=dur*CAM_SLOW;
-  const pts=RM? null : routeVia(p0,p1); if(pts){ curve=new THREE.CatmullRomCurve3(pts,false,'centripetal',.5); d=THREE.MathUtils.clamp(curve.getLength()/WALK_MPS, d, WALK_MAX_S); }
+function flyTo(p,tg,dur=2,done=null,delay=0,opt={}){ const p0=camera.position.clone(), p1=new THREE.Vector3(...p); let curve=null, d=dur;
+  if(dur>.1 && !opt.raw) d=dur*CAM_SLOW;
+  const pts=(RM||opt.route===false)? null : routeVia(p0,p1); if(pts){ curve=new THREE.CatmullRomCurve3(pts,false,'centripetal',.5); d=THREE.MathUtils.clamp(curve.getLength()/(opt.mps||WALK_MPS), opt.raw?dur:d, WALK_MAX_S); }
   const doors = curve ? DOORLEAF.filter(dl=>curve.getSpacedPoints(60).some(q=>(q.x-dl.c[0])**2+(q.z-dl.c[1])**2<.5)) : [];
   tween={ p0, t0:controls.target.clone(), p1, t1:new THREE.Vector3(...tg), curve, doors, s:performance.now()+delay, d:(RM?.05:d)*1000, done }; needsRender=Math.max(needsRender,2); }
 const _fw=new THREE.Vector3(), _la=new THREE.Vector3(), _tg=new THREE.Vector3();
@@ -1573,7 +1604,7 @@ function showStep(i,fly=true){ tourI=(i+TOUR.length)%TOUR.length; const s=TOUR[t
   $('capStep').textContent=`${tourI+1} / ${TOUR.length}`; $('cap').classList.remove('min'); clearTimeout(showStep.t); showStep.t=setTimeout(()=>$('cap').classList.add('min'),4500); $('capT').textContent=inf.title; $('capD').textContent=inf.desc;
   $('tProg').innerHTML=TOUR.map((_,k)=>`<i class="${k<tourI?'done':''}">${k===tourI?'<b></b>':''}</i>`).join('');
   if(fly){ if(s.sc){ setScene(s.sc); if(s.hold){ ST.curtain=1; } } flyTo(inf.p,inf.t,2.6); if(s.hs==='tub') playWater(); tourElapsed=0; } }
-function startTour(){ TRACK.pv('/tour/start'); closeCard(); $('info').classList.remove('open'); touring=true; tourPaused=false; document.body.classList.add('touring'); $('tPlay').textContent='❚❚'; showStep(0); }
+function startTour(){ if(CINE.on) skipOpening(); TRACK.pv('/tour/start'); closeCard(); $('info').classList.remove('open'); touring=true; tourPaused=false; document.body.classList.add('touring'); $('tPlay').textContent='❚❚'; showStep(0); }
 function stopTour(){ if(!touring) return; touring=false; document.body.classList.remove('touring'); }
 function pauseTour(){ if(touring && !tourPaused){ tourPaused=true; $('tPlay').textContent='▶'; } }
 function resumeTour(){ if(touring && tourPaused){ tourPaused=false; $('tPlay').textContent='❚❚'; } }
@@ -1634,7 +1665,8 @@ function frame(){
   if(benching){ requestAnimationFrame(frame); return; }
   const dt=Math.min(clock.getDelta(),.1), now=performance.now(); TRACK.tick(dt);
   // doors: open when the camera (or its next waypoint) is near, close again behind it
-  const ddt=Math.min(.5,(now-(frame.lastNow||now))/1000); frame.lastNow=now;   // wall-clock step so doors keep pace with time-based camera moves even on slow frames
+  const ddt=Math.min(.5,(now-(frame.lastNow||now))/1000); frame.lastNow=now;
+  if(Math.abs(ENTRY.tk-ENTRY.k)>.001){ ENTRY.k += Math.sign(ENTRY.tk-ENTRY.k)*Math.min(Math.abs(ENTRY.tk-ENTRY.k), ddt/1.7); const e=ENTRY.k*ENTRY.k*(3-2*ENTRY.k); entryH.rotation.y=1.3*e; needsRender=Math.max(needsRender,2); }   // wall-clock step so doors keep pace with time-based camera moves even on slow frames
   for(const d of DOORLEAF){ const dx=camera.position.x-d.c[0], dz=camera.position.z-d.c[1]; let near=camera.position.y<3 && dx*dx+dz*dz < (d.tk? 3.2*3.2 : 2.5*2.5);
     if(!near && tween && tween.doors.includes(d) && dx*dx+dz*dz<5.5*5.5) near=true;   // on our route: open well before we arrive
     d.tk = near?1:0; if(Math.abs(d.tk-d.k)>.001){ d.k += Math.sign(d.tk-d.k)*Math.min(Math.abs(d.tk-d.k), ddt/(d.slide?1.1:1.4)); const e=d.k*d.k*(3-2*d.k);
@@ -1649,15 +1681,15 @@ function frame(){
     else { const e=easeSine(k); camera.position.lerpVectors(tween.p0,tween.p1,e); controls.target.lerpVectors(tween.t0,tween.t1,e); }
     if(k>=1){ const f=tween.done; tween=null; f&&f(); } needsRender=Math.max(needsRender,2); }
   // depth of field: only while a guided-tour shot is held still (HQ only)
-  { const want = touring && HQ && !tween && !motionLOD; if(want){ const fd=camera.position.distanceTo(controls.target), u=bokeh.uniforms.focus; if(!bokeh.enabled){ u.value=fd; } else if(Math.abs(u.value-fd)>.01){ u.value+=(fd-u.value)*Math.min(1,dt*4); needsRender=Math.max(needsRender,1); } }
+  { const want = !!((touring && HQ && !tween && !motionLOD) || (CINE.dof && !TIER.low)); if(want){ bokeh.uniforms.aperture.value=CINE.dof? CINE.dof.ap : .0018; bokeh.uniforms.maxblur.value=CINE.dof? CINE.dof.mb : .0042; const fd=camera.position.distanceTo(controls.target), u=bokeh.uniforms.focus; if(!bokeh.enabled){ u.value=fd; } else if(Math.abs(u.value-fd)>.01){ u.value+=(fd-u.value)*Math.min(1,dt*4); needsRender=Math.max(needsRender,1); } }
     if(want!==bokeh.enabled){ bokeh.enabled=want; needsRender=Math.max(needsRender,2); } }
-  const fw=(keys['w']||keys['arrowup']?1:0)-(keys['s']||keys['arrowdown']?1:0), st=(keys['d']||keys['arrowright']?1:0)-(keys['a']||keys['arrowleft']?1:0);
+  const fw=CINE.on?0:(keys['w']||keys['arrowup']?1:0)-(keys['s']||keys['arrowdown']?1:0), st=CINE.on?0:(keys['d']||keys['arrowright']?1:0)-(keys['a']||keys['arrowleft']?1:0);
   if(fw||st){ tween=null; pauseTour(); const f=tmp.subVectors(controls.target,camera.position); f.y=0; f.normalize(); const r=new THREE.Vector3(-f.z,0,f.x); const mv=f.multiplyScalar(fw*2.2*dt).addScaledVector(r,st*2.2*dt); const cp=camera.position;
     if(cp.y<3 && walkable(cp.x,cp.z) && !walkable(cp.x+mv.x,cp.z+mv.z)){ if(walkable(cp.x+mv.x,cp.z)) mv.z=0; else if(walkable(cp.x,cp.z+mv.z)) mv.x=0; else mv.set(0,0,0); }
     camera.position.add(mv); controls.target.add(mv); needsRender=2; }
   if(gyro && gyroBase===null && gyro.a){ gyroBase={a:gyro.a,b:gyro.b,t:controls.target.clone()}; }
   if(gyro && gyroBase){ const yaw=THREE.MathUtils.degToRad(((gyro.a-gyroBase.a+540)%360)-180), pit=THREE.MathUtils.degToRad(gyro.b-gyroBase.b)*.6; const v=gyroBase.t.clone().sub(camera.position); v.applyAxisAngle(new THREE.Vector3(0,1,0),yaw); v.y+=Math.tan(-pit)*v.length()*.5; controls.target.copy(camera.position).add(v); }
-  if(sceneMoving){ let moving=false; for(const k in ST){ const d=ST[k]-S[k]; if(Math.abs(d)>.002){ S[k]+=d*Math.min(1,dt*(k==='curtain'?.75:1.8)); moving=true; } else S[k]=ST[k]; } applyScene(S); if(!moving){ sceneMoving=false; envDirty=true; } }
+  if(sceneMoving){ let moving=false; for(const k in ST){ const d=ST[k]-S[k]; if(Math.abs(d)>.002){ S[k]+=d*Math.min(1,dt*(k==='curtain'?.75:1.8)*SCENE_RATE); moving=true; } else S[k]=ST[k]; } applyScene(S); if(!moving){ sceneMoving=false; envDirty=true; } }
   if(envDirty && !sceneMoving){ envDirty = captureStep(); needsRender=Math.max(needsRender,2); }
   controls.update();
   // tour timing
@@ -1670,7 +1702,7 @@ function frame(){
     const zone=zoneOf(camera.position);
     if(zone!==lastZone){ lastZone=zone; TRACK.zone(zone); if(openHS && !touring){ const oz=hsEls.find(h=>h.id===openHS).z; const ok2 = zone==='overview' || oz===zone || (['living','dining'].includes(oz)&&['living','dining'].includes(zone)); if(!ok2 && !tween) closeCard(); } document.querySelectorAll('#planSvg .rm').forEach(r=>r.classList.toggle('on',r.dataset.k===zone)); $('planZone').textContent=t('sp.'+zone); const rn=$('rn'); rn.style.opacity=0; setTimeout(()=>{ rn.textContent=t('sp.'+zone); rn.style.opacity=1; },200); }
     ceilings.visible = camera.position.y <= TRAY-.05;
-    southWalls.forEach(m=>m.visible = !(camera.position.y>3.2)); DOORLEAF.forEach(d=>{ if(d.south) d.g.visible = !(camera.position.y>3.2); });
+    southWalls.forEach(m=>m.visible = !(camera.position.y>3.2)); DOORLEAF.forEach(d=>{ if(d.south) d.g.visible = !(camera.position.y>3.2); }); entryH.visible = camera.position.y<=3.2;
     VIEW.day.concat(VIEW.night).forEach(m=>m.visible = camera.position.y<3.2);
     const open = zone==='living'||zone==='dining' ? ['living','dining'] : [zone];
     for(const h of hsEls){ let show = open.includes(h.z) && zone!=='overview';
@@ -1695,7 +1727,7 @@ function frame(){
 }
 
 /* ================= start ================= */
-window.__suite = { scene3:scene, camera, go, doors:()=>DOORLEAF.map(d=>+d.k.toFixed(2)), look:(p,t)=>flyTo(p,t,.01), pbr:()=>({floor:M.floor.map&&M.floor.map.isCompressedTexture||M.floor.map?.isTexture&&!M.floor.map.isCanvasTexture}), scene:(k)=>{ setScene(k); Object.assign(S,SCENES[k]); applyScene(S); sceneMoving=false; envDirty=true; }, hs:(id)=>{ showCard(id); }, renderer, setHQ, tour:()=>enter(true), enter:()=>enter(false), info:()=>({calls:renderer.info.render.calls}) };
+window.__suite = { scene3:scene, camera, go, dbg:()=>({ bokeh:bokeh.enabled, ap:bokeh.uniforms.aperture.value, cine:CINE.on, dof:!!CINE.dof, intro:!!document.getElementById('intro'), gtao:gtao.enabled }), doors:()=>DOORLEAF.map(d=>+d.k.toFixed(2)), look:(p,t)=>flyTo(p,t,.01), pbr:()=>({floor:M.floor.map&&M.floor.map.isCompressedTexture||M.floor.map?.isTexture&&!M.floor.map.isCanvasTexture}), scene:(k)=>{ setScene(k); Object.assign(S,SCENES[k]); applyScene(S); sceneMoving=false; envDirty=true; }, hs:(id)=>{ showCard(id); }, renderer, setHQ, tour:()=>enter(true), enter:()=>enter(false), info:()=>({calls:renderer.info.render.calls}) };
 if(TIER.low) setHQ(false);
 renderText();
 setScene('welcome');
@@ -1734,7 +1766,7 @@ async function loadBakedAO(){
   const t=await new THREE.TextureLoader().loadAsync('lm/floor_ao.webp'); t.channel=1; t.colorSpace=THREE.NoColorSpace; t.anisotropy=renderer.capabilities.getMaxAnisotropy();
   await whenIdle(); scene.updateMatrixWorld(true); const flat=new Set(), users=new Map(), bb=new THREE.Box3();
   scene.traverse(o=>{ if(!o.isMesh) return; for(const m of [].concat(o.material)){ if(!users.has(m)) users.set(m,[]); users.get(m).push(o); }
-    if(o.isInstancedMesh) return; const g=o.geometry; if(!g.boundingBox) g.computeBoundingBox(); bb.copy(g.boundingBox).applyMatrix4(o.matrixWorld);
+    if(o.isInstancedMesh || o.userData.noAO) return; const g=o.geometry; if(!g.boundingBox) g.computeBoundingBox(); bb.copy(g.boundingBox).applyMatrix4(o.matrixWorld);
     if(bb.max.y<.045 && bb.min.y>-.02 && bb.max.x-bb.min.x>.3 && bb.max.z-bb.min.z>.3) flat.add(o); });
   const seenGeo=new Set(), v=new THREE.Vector3(), B=AO_BOUNDS, cloned=new Map();
   for(const o of flat){
@@ -1754,16 +1786,78 @@ async function loadBakedAO(){
   await precompile(); envDirty=true;
 }
 loadPBR().catch(e=>console.warn('PBR textures not loaded',e)).finally(()=>loadBakedAO().catch(e=>console.warn('baked AO not loaded',e)));
-// opening shot: curtains closed, glide from the foyer through the door while the drapes open on the view
-function opening(){ S.curtain=ST.curtain=1; applyScene(S); camera.position.set(-3.1,1.62,5.4); controls.target.set(-2.5,1.45,-3); controls.update();
-  flyTo([-1.0,1.58,1.5],[1.4,1.42,-3],5.5,null,500); setTimeout(()=>{ if(sceneKey==='welcome'){ ST.curtain=0; sceneMoving=true; } },1300); }
+/* ================= opening shots =================
+   signature: corridor -> key card -> door opens -> foyer -> (cut) welcome card -> pull back as the curtains open
+   welcome / arrival / plan / city / timelapse can be picked from the menu or with ?open=<name> */
+const OPENINGS=['signature','welcome','arrival','plan','city','timelapse'];
+const END_WIDE={ p:[0.9,1.56,2.55], t:[0.55,1.12,-3.0] };
+const cineUI=(()=>{ const mk=(id,cls,html='')=>{ const e=document.createElement('div'); e.id=id; if(cls) e.className=cls; e.innerHTML=html; document.body.appendChild(e); return e; };
+  const top=mk('lbT'), bot=mk('lbB'), fade=mk('cineFade'), title=mk('cineTitle','', '<div class="h"></div><div class="r"></div><div class="m"></div>');
+  const skip=document.createElement('button'); skip.id='cineSkip'; document.body.appendChild(skip); skip.addEventListener('click',()=>skipOpening());
+  return { top, bot, fade, title, skip }; })();
+function cardPose(d=.3){ const m=CARD.mesh; m.updateMatrixWorld(true); const c=m.getWorldPosition(new THREE.Vector3()), n=new THREE.Vector3(0,0,1).applyQuaternion(m.getWorldQuaternion(new THREE.Quaternion()));
+  const p=c.clone().addScaledVector(n,d); p.y+=.05; return { p:p.toArray(), t:c.toArray() }; }
+function firstPose(mode){ return mode==='welcome'? cardPose() : (mode==='signature'||mode==='arrival')? { p:[-2.1,1.62,9.0], t:[-2.1,1.45,6.0] }
+  : mode==='plan'? { p:[0.6,16.5,3.3], t:[0.6,0,2.0] } : mode==='city'? { p:[1.5,1.55,-8.8], t:[1.5,1.5,-3] } : mode==='timelapse'? { p:[2.9,1.56,2.55], t:[-0.6,1.15,-2.7] } : null; }
+function setCam(p,t){ tween=null; camera.position.set(...p); controls.target.set(...t); controls.update(); needsRender=Math.max(needsRender,3); }
+function prepOpening(mode){ const f=firstPose(mode); if(!f) return; CINE.mode=mode; corridor.visible = mode==='signature'||mode==='arrival';
+  if(mode==='city') window.__suite.scene('evening'); else if(mode==='timelapse') window.__suite.scene('turndown'); else { S.curtain=ST.curtain=1; applyScene(S); }
+  setCam(f.p,f.t); }
+function sfx(kind){ if(!soundOn||!AC) return; try{ const n=AC.currentTime, g=AC.createGain(); g.connect(AC.destination);
+  if(kind==='beep'){ for(const [f,o] of [[1760,0],[2350,.11]]){ const os=AC.createOscillator(); os.frequency.value=f; const gg=AC.createGain(); gg.gain.setValueAtTime(0,n+o); gg.gain.linearRampToValueAtTime(.05,n+o+.01); gg.gain.linearRampToValueAtTime(0,n+o+.09); os.connect(gg).connect(AC.destination); os.start(n+o); os.stop(n+o+.1); } return; }
+  const src=AC.createBufferSource(); src.buffer=noiseBuf(kind!=='latch'); const fl=AC.createBiquadFilter(); fl.type= kind==='latch'?'highpass':'lowpass'; fl.frequency.value= kind==='latch'?2200 : kind==='curtain'?900:500;
+  const len= kind==='latch'?.08 : kind==='curtain'?2.6 : 1.4, pk= kind==='latch'?.25 : kind==='curtain'?.06 : .12;
+  g.gain.setValueAtTime(0,n); g.gain.linearRampToValueAtTime(pk,n+len*.25); g.gain.linearRampToValueAtTime(0,n+len); src.connect(fl).connect(g); src.start(n); src.stop(n+len+.05); }catch(e){} }
+function showTitle(sub){ const T2=cineUI.title; T2.querySelector('.h').textContent=cfg(CONFIG.hotel); T2.querySelector('.r').textContent=cfg(CONFIG.room);
+  T2.querySelector('.m').textContent= sub || (cfg(CONFIG.city)+' · '+CONFIG.area+' ㎡'); T2.classList.add('on'); setTimeout(()=>T2.classList.remove('on'),4200); }
+const cw=(ms,tok)=>new Promise((res,rej)=>setTimeout(()=>tok===CINE.tok?res():rej('skip'),ms));
+const cf=(p,t,s2,tok,opt={})=>new Promise((res,rej)=>flyTo(p,t,s2,()=>tok===CINE.tok?res():rej('skip'),0,{raw:true,route:false,...opt}));
+async function fadeCut(p,t,tok){ cineUI.fade.classList.add('on'); await cw(420,tok); setCam(p,t); await cw(160,tok); cineUI.fade.classList.remove('on'); }
+function openCurtains(){ ST.curtain=0; sceneMoving=true; sfx('curtain'); }
+async function arrivalPart(tok){ corridor.visible=true; ENTRY.k=ENTRY.tk=0; entryH.rotation.y=0; ENTRY_LED.mat.emissive.setHex(0xff2a18);
+  const f=firstPose('arrival'); setCam(f.p,f.t); showTitle();
+  const push=cf([-2.1,1.62,8.0],[-2.1,1.45,6.0],2.8,tok);
+  await cw(1300,tok); ENTRY_LED.mat.emissive.setHex(0x2bff6a); sfx('beep'); needsRender=Math.max(needsRender,2);
+  await cw(450,tok); ENTRY.tk=1; sfx('latch'); setTimeout(()=>sfx('door'),150);
+  await push; await cw(500,tok);
+  await cf([-2.25,1.6,4.5],[-2.95,1.4,0.2],4.6,tok);
+  ENTRY.tk=0; setTimeout(()=>{ if(ENTRY.tk===0) corridor.visible=false; },1900); }
+async function welcomePart(tok,cut){ const c=cardPose(); if(cut) await fadeCut(c.p,c.t,tok); else setCam(c.p,c.t);
+  CINE.dof={ ap:.03, mb:.012 }; if(!cut) showTitle(); await cw(2200,tok);
+  CINE.dof=null; openCurtains(); await cf(END_WIDE.p,END_WIDE.t,7.0,tok); }
+const OPEN_RUN={
+  signature: async tok=>{ await arrivalPart(tok); await welcomePart(tok,true); },
+  welcome:   async tok=>{ await welcomePart(tok,false); },
+  arrival:   async tok=>{ await arrivalPart(tok); openCurtains(); await cf(END_WIDE.p,END_WIDE.t,5.5,tok,{ route:true, mps:.8 }); },
+  plan:      async tok=>{ const f=firstPose('plan'); setCam(f.p,f.t); showTitle(); await cw(1600,tok); openCurtains(); await cf([0.9,6.2,4.4],[0.6,0.6,0.4],4.6,tok); await cf(END_WIDE.p,END_WIDE.t,4.8,tok); },
+  city:      async tok=>{ const f=firstPose('city'); setCam(f.p,f.t); showTitle(); await cw(1400,tok); await cf([1.5,1.55,-4.1],[1.5,1.5,0],5.0,tok); await cf([1.5,1.55,-1.5],[1.3,1.45,2.6],3.0,tok); await cf(VIEWS.living.p,VIEWS.living.t,5.2,tok); },
+  timelapse: async tok=>{ const f=firstPose('timelapse'); setCam(f.p,f.t); showTitle(t('op.tl')); await cw(1800,tok); SCENE_RATE=.36; setScene('day'); await cw(9000,tok); SCENE_RATE=1; },
+};
+function finishOpening(){ const m=CINE.mode; CINE.on=false; CINE.dof=null; SCENE_RATE=1; controls.enabled=true; document.body.classList.remove('cine'); cineUI.title.classList.remove('on'); cineUI.fade.classList.remove('on');
+  if(ENTRY.tk!==0||ENTRY.k!==0){ ENTRY.tk=ENTRY.k=0; entryH.rotation.y=0; } corridor.visible=false; needsRender=Math.max(needsRender,3);
+  let seen=false; try{ seen=localStorage.getItem('suiteHint')==='1'; localStorage.setItem('suiteHint','1'); localStorage.setItem('suiteOpened','1'); }catch(e){} if(!seen) toast(t('ui.hintShort'),6000); }
+function skipOpening(){ if(!CINE.on) return; CINE.tok++; tween=null; TRACK.pv('/opening/skip');
+  const m=CINE.mode; if(m==='city') setCam(VIEWS.living.p,VIEWS.living.t); else setCam(END_WIDE.p,END_WIDE.t);
+  if(m==='timelapse'){ window.__suite.scene('day'); } else if(m!=='city'){ ST.curtain=0; S.curtain=0; applyScene(S); }
+  finishOpening(); }
+async function playOpening(mode){ if(!OPEN_RUN[mode]||RM) return; if(CINE.on) skipOpening(); stopTour(); closeCard();
+  const tok=++CINE.tok; CINE.on=true; CINE.mode=mode; controls.enabled=false; document.body.classList.add('cine'); cineUI.skip.textContent=t('ui.skip')+'  ›'; TRACK.pv('/opening/'+mode);
+  if(!firstPose(mode) || camera.position.distanceTo(new THREE.Vector3(...firstPose(mode).p))>.05) prepOpening(mode);
+  try{ await OPEN_RUN[mode](tok); if(tok===CINE.tok) finishOpening(); }catch(e){ if(e!=='skip') { console.warn(e); if(tok===CINE.tok) finishOpening(); } } }
+const OPEN_MODE = (()=>{ if(RM) return 'none'; const q=new URLSearchParams(location.search).get('open'); if(q && (OPENINGS.includes(q)||q==='none')) return q;
+  if(VIEWS[location.hash.slice(1)]) return 'none'; let seen=false; try{ seen=localStorage.getItem('suiteOpened')==='1'; }catch(e){} return seen? 'welcome' : 'signature'; })();
+if(OPEN_MODE!=='none') prepOpening(OPEN_MODE);
+// menu: replay any opening
+{ const box2=document.createElement('div'); box2.id='mOpen'; box2.innerHTML='<div class="l" data-i="ui.opening"></div><div class="chips">'+OPENINGS.map(m=>`<button data-o="${m}" data-i="op.${m}"></button>`).join('')+'</div>';
+  $('menu').appendChild(box2); box2.querySelectorAll('button').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); $('menu').classList.remove('open'); playOpening(b.dataset.o); })); renderText(); }
 function enter(withTour){ TRACK.start(withTour?'tour':'explore');
   if(!$('intro') || $('intro').classList.contains('gone')){ if(withTour) startTour(); return; }
   document.body.classList.remove('intro'); $('intro').classList.add('gone'); setTimeout(()=>$('intro').remove(),1000);
   needsRender=4;
   const idle=window.requestIdleCallback||((f)=>setTimeout(f,400)); const job=()=>{ if(paintNight(false)) idle(job); }; setTimeout(()=>idle(job),1500);
-  if(withTour){ S.curtain=ST.curtain=1; applyScene(S); startTour(); }
-  else { if(startKey==='foyer' && !RM && sceneKey==='welcome') opening(); let seen=false; try{ seen=localStorage.getItem('suiteHint')==='1'; localStorage.setItem('suiteHint','1'); }catch(e){} if(!seen) toast(t('ui.hintShort'),6000); }
+  if(withTour){ corridor.visible=false; if(sceneKey!=='welcome') window.__suite.scene('welcome'); setCam(VIEWS.foyer.p,VIEWS.foyer.t); S.curtain=ST.curtain=1; applyScene(S); startTour(); }
+  else if(OPEN_MODE!=='none') playOpening(CINE.mode||OPEN_MODE);
+  else { let seen=false; try{ seen=localStorage.getItem('suiteHint')==='1'; localStorage.setItem('suiteHint','1'); }catch(e){} if(!seen) toast(t('ui.hintShort'),6000); }
 }
 
 /* ================= built-in GPU benchmark (open with #bench) ================= */
