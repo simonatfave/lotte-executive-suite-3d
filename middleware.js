@@ -165,10 +165,6 @@ sync();
 export default async function middleware(request) {
   const url = new URL(request.url);
   if (PUBLIC.has(url.pathname)) return;
-  if (url.pathname === '/__gate/diag') {
-    const raw = process.env.GATE_CODE;
-    return new Response(JSON.stringify({ defined: raw !== undefined, rawLength: raw ? String(raw).length : 0, digitsLength: CODE.length, vercelEnv: process.env.VERCEL_ENV || null, envKeyCount: Object.keys(process.env || {}).length }), { headers: { 'Content-Type': 'application/json', ...BASE_HDR } });
-  }
 
   if (url.pathname === '/__gate' && request.method === 'POST') {
     let code = '', next = '/', hash = '';
