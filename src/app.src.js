@@ -1473,7 +1473,7 @@ const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').m
 /* ================= camera ================= */
 let tween=null;
 function flyTo(p,tg,dur=2,done=null,delay=0){ const p0=camera.position.clone(), p1=new THREE.Vector3(...p); let curve=null, d=dur;
-  const pts=RM? null : routeVia(p0,p1); if(pts){ curve=new THREE.CatmullRomCurve3(pts,false,'centripetal',.5); d=THREE.MathUtils.clamp(curve.getLength()/1.55, dur, 7); }
+  const pts=RM? null : routeVia(p0,p1); if(pts){ curve=new THREE.CatmullRomCurve3(pts,false,'centripetal',.5); d=THREE.MathUtils.clamp(curve.getLength()/2.1, dur, 5.2); }
   tween={ p0, t0:controls.target.clone(), p1, t1:new THREE.Vector3(...tg), curve, s:performance.now()+delay, d:(RM?.05:d)*1000, done }; needsRender=Math.max(needsRender,2); }
 const _fw=new THREE.Vector3(), _la=new THREE.Vector3(), _tg=new THREE.Vector3();
 const smooth5=k=>k*k*k*(k*(6*k-15)+10), sstep=(a,b,x)=>{ const t=Math.min(1,Math.max(0,(x-a)/(b-a))); return t*t*(3-2*t); };
@@ -1688,7 +1688,32 @@ async function loadPBR(){
   L.dispose(); envDirty=true; needsRender=Math.max(needsRender,4);
 }
 const PBR_TINT={ walnut:0x9a8a80, ebony:0x4a4440 };
-loadPBR().catch(e=>console.warn('PBR textures not loaded',e));
+// baked ambient occlusion for everything at floor level (Cycles, src/texgen/bake_floor_ao.py), projected top-down via a uv1 channel
+const AO_BOUNDS={ x0:-9, x1:10, z0:-3, z1:7.2 };
+async function loadBakedAO(){
+  const t=await new THREE.TextureLoader().loadAsync('lm/floor_ao.webp'); t.channel=1; t.colorSpace=THREE.NoColorSpace; t.anisotropy=renderer.capabilities.getMaxAnisotropy();
+  scene.updateMatrixWorld(true); const flat=new Set(), users=new Map(), bb=new THREE.Box3();
+  scene.traverse(o=>{ if(!o.isMesh) return; for(const m of [].concat(o.material)){ if(!users.has(m)) users.set(m,[]); users.get(m).push(o); }
+    if(o.isInstancedMesh) return; const g=o.geometry; if(!g.boundingBox) g.computeBoundingBox(); bb.copy(g.boundingBox).applyMatrix4(o.matrixWorld);
+    if(bb.max.y<.045 && bb.min.y>-.02 && bb.max.x-bb.min.x>.3 && bb.max.z-bb.min.z>.3) flat.add(o); });
+  const seenGeo=new Set(), v=new THREE.Vector3(), B=AO_BOUNDS, cloned=new Map();
+  for(const o of flat){
+    if(seenGeo.has(o.geometry)) o.geometry=o.geometry.clone(); seenGeo.add(o.geometry);
+    const P=o.geometry.attributes.position, uv1=new Float32Array(P.count*2);
+    for(let i=0;i<P.count;i++){ v.fromBufferAttribute(P,i).applyMatrix4(o.matrixWorld); uv1[i*2]=(v.x-B.x0)/(B.x1-B.x0); uv1[i*2+1]=(v.z-B.z0)/(B.z1-B.z0); }
+    o.geometry.setAttribute('uv1',new THREE.BufferAttribute(uv1,2));
+    const fix=m=>{ if(m.transparent) return m; const shared=users.get(m).some(u=>!flat.has(u)); let mm=m; if(shared){ if(!cloned.has(m)) cloned.set(m,m.clone()); mm=cloned.get(m); }
+      mm.aoMap=t; mm.aoMapIntensity=1;
+      // the suite is mostly lit by unshadowed lamps, so let the baked occlusion also soften direct light (reads like contact shadows)
+      if(!mm.userData.aoDirect){ mm.userData.aoDirect=1; const prev=mm.onBeforeCompile; mm.onBeforeCompile=(sh,r)=>{ prev&&prev.call(mm,sh,r);
+        sh.fragmentShader=sh.fragmentShader.replace('#include <aomap_fragment>','#include <aomap_fragment>\n\treflectedLight.directDiffuse *= mix( 1.0, ambientOcclusion, 0.8 );\n\treflectedLight.directSpecular *= mix( 1.0, ambientOcclusion, 0.6 );'); };
+        mm.customProgramCacheKey=()=>'aoDirect'; }
+      mm.needsUpdate=true; return mm; };
+    o.material = Array.isArray(o.material) ? o.material.map(fix) : fix(o.material);
+  }
+  envDirty=true; needsRender=Math.max(needsRender,4);
+}
+loadPBR().catch(e=>console.warn('PBR textures not loaded',e)).finally(()=>loadBakedAO().catch(e=>console.warn('baked AO not loaded',e)));
 // opening shot: curtains closed, glide from the foyer through the door while the drapes open on the view
 function opening(){ S.curtain=ST.curtain=1; applyScene(S); camera.position.set(-3.1,1.62,5.4); controls.target.set(-2.5,1.45,-3); controls.update();
   flyTo([-1.0,1.58,1.5],[1.4,1.42,-3],5.5,null,500); setTimeout(()=>{ if(sceneKey==='welcome'){ ST.curtain=0; sceneMoving=true; } },1300); }
