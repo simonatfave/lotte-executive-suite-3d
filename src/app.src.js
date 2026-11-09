@@ -81,22 +81,22 @@ const HS_TEXT = {
 };
 
 
-Object.assign(I18N.ko,{ 'ui.plan':'평면도','ui.tourStart':'가이드 투어','ui.explore':'직접 둘러보기','ui.quality':'화질','ui.fs':'전체화면','ui.perf':'성능 정보','ui.exit':'투어 종료','ui.bookShort':'예약',
+Object.assign(I18N.ko,{ 'ui.privacy':'방문 통계 안내: 제안 후속 안내를 위해 열람 여부와 둘러본 공간을 익명 통계로 수집합니다 (Vercel Web Analytics · 추적 쿠키 없음).','ui.plan':'평면도','ui.tourStart':'가이드 투어','ui.explore':'직접 둘러보기','ui.quality':'화질','ui.fs':'전체화면','ui.perf':'성능 정보','ui.exit':'투어 종료','ui.bookShort':'예약',
   'ui.hintShort':'드래그로 둘러보고, 바닥을 더블클릭하면 이동합니다. ＋를 누르면 어메니티 정보가 열립니다.','ui.hqv':'고화질','ui.sqv':'표준',
   'load.tex':'재질을 준비하고 있습니다','load.arch':'공간을 구성하고 있습니다','load.furn':'가구를 배치하고 있습니다','load.light':'조명을 맞추고 있습니다','load.shader':'렌더링을 준비하고 있습니다',
   'tour.foyer':'문을 열면 펜던트 조명과 워크인 클로짓이 먼저 맞이합니다.','tour.living':'서울 도심을 향한 대형 창과 6인 라운지가 있는 거실입니다.','tour.dining':'8인 테이블과 한옥 창살 모티프 월, 미니바를 갖춘 다이닝입니다.',
   'tour.bedroom':'해가 지면 객실은 따뜻한 간접조명의 이브닝 모드로 바뀝니다.','tour.bath':'대리석 욕실에는 창가 욕조와 레인 샤워, 더블 베니티가 있습니다.','tour.turndown':'턴다운 서비스 — 커튼이 닫히고 침구가 정돈되며 슬리퍼가 준비됩니다.','tour.end':'약 {area}㎡의 스위트 전체를 한눈에 봅니다.' });
-Object.assign(I18N.en,{ 'ui.plan':'Floor plan','ui.tourStart':'Guided tour','ui.explore':'Explore freely','ui.quality':'Quality','ui.fs':'Full screen','ui.perf':'Performance','ui.exit':'End tour','ui.bookShort':'Book',
+Object.assign(I18N.en,{ 'ui.privacy':'Visit statistics: whether this demo was opened and which spaces were viewed are collected anonymously (Vercel Web Analytics, no tracking cookies).','ui.plan':'Floor plan','ui.tourStart':'Guided tour','ui.explore':'Explore freely','ui.quality':'Quality','ui.fs':'Full screen','ui.perf':'Performance','ui.exit':'End tour','ui.bookShort':'Book',
   'ui.hintShort':'Drag to look around and double-click the floor to move. Tap ＋ for amenity details.','ui.hqv':'High','ui.sqv':'Standard',
   'load.tex':'Preparing materials','load.arch':'Building the rooms','load.furn':'Placing the furniture','load.light':'Setting the lights','load.shader':'Preparing the renderer',
   'tour.foyer':'Step inside to a pendant-lit foyer and a walk-in closet.','tour.living':'The living room: large windows over central Seoul and a lounge for six.','tour.dining':'Dining for eight, a lattice feature wall and the minibar.',
   'tour.bedroom':'As the sun sets, the room shifts to warm evening lighting.','tour.bath':'The marble bathroom has a window-side tub, rain shower and twin vanity.','tour.turndown':'Turndown — curtains close, the bed is turned down, slippers set out.','tour.end':'The whole {area} m² suite at a glance.' });
-Object.assign(I18N.ja,{ 'ui.plan':'フロアプラン','ui.tourStart':'ガイドツアー','ui.explore':'自由に見る','ui.quality':'画質','ui.fs':'全画面','ui.perf':'パフォーマンス','ui.exit':'ツアー終了','ui.bookShort':'予約',
+Object.assign(I18N.ja,{ 'ui.privacy':'閲覧統計について：閲覧の有無と見たスペースを匿名の統計として収集します（Vercel Web Analytics・トラッキングCookieなし）。','ui.plan':'フロアプラン','ui.tourStart':'ガイドツアー','ui.explore':'自由に見る','ui.quality':'画質','ui.fs':'全画面','ui.perf':'パフォーマンス','ui.exit':'ツアー終了','ui.bookShort':'予約',
   'ui.hintShort':'ドラッグで見回し、床をダブルクリックで移動。＋でアメニティ情報を表示します。','ui.hqv':'高','ui.sqv':'標準',
   'load.tex':'素材を準備しています','load.arch':'空間を構成しています','load.furn':'家具を配置しています','load.light':'照明を調整しています','load.shader':'レンダリングを準備しています',
   'tour.foyer':'扉を開けると、ペンダント照明とウォークインクローゼットがお迎えします。','tour.living':'ソウル都心を望む大きな窓と6名のラウンジがあるリビング。','tour.dining':'8名用テーブル、格子モチーフの壁、ミニバーを備えたダイニング。',
   'tour.bedroom':'日が暮れると、客室は温かな間接照明のイブニングモードに。','tour.bath':'大理石のバスルームには窓辺のバスタブ、レインシャワー、ダブルシンク。','tour.turndown':'ターンダウン — カーテンが閉まり、寝具が整い、スリッパが用意されます。','tour.end':'約{area}㎡のスイート全体を一望。' });
-Object.assign(I18N.zh,{ 'ui.plan':'平面图','ui.tourStart':'导览','ui.explore':'自由浏览','ui.quality':'画质','ui.fs':'全屏','ui.perf':'性能信息','ui.exit':'结束导览','ui.bookShort':'预订',
+Object.assign(I18N.zh,{ 'ui.privacy':'访问统计说明：我们以匿名方式统计是否打开本演示及浏览的空间（Vercel Web Analytics，不使用跟踪 Cookie）。','ui.plan':'平面图','ui.tourStart':'导览','ui.explore':'自由浏览','ui.quality':'画质','ui.fs':'全屏','ui.perf':'性能信息','ui.exit':'结束导览','ui.bookShort':'预订',
   'ui.hintShort':'拖动环视，双击地面移动，点击＋查看设施信息。','ui.hqv':'高','ui.sqv':'标准',
   'load.tex':'正在准备材质','load.arch':'正在构建空间','load.furn':'正在布置家具','load.light':'正在调整灯光','load.shader':'正在准备渲染',
   'tour.foyer':'推门而入，吊灯与步入式衣帽间率先迎接您。','tour.living':'客厅拥有俯瞰首尔市中心的大型窗户和六人会客区。','tour.dining':'配有八人餐桌、窗棂主题墙与迷你吧的餐厅。',
@@ -116,7 +116,7 @@ await tick(4,'load.tex');
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias:false, powerPreference:'high-performance', preserveDrawingBuffer:true });
 const TIER = { low: !window.__forceHigh && (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || (navigator.hardwareConcurrency||8)<=4 || Math.min(screen.width,screen.height)<500) };
-let PR = TIER.low ? 1 : Math.min(devicePixelRatio, 1.75);
+let PR = TIER.low ? 1 : Math.min(devicePixelRatio, 1.5);
 renderer.setPixelRatio(PR);
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -1281,14 +1281,15 @@ for(let i=0;i<NPOOL.point;i++){ const l=new THREE.PointLight(0xffffff,0,5,2); sc
 for(let i=0;i<NPOOL.spot;i++){ const l=new THREE.SpotLight(0xffffff,0,5,.5,.5,2); scene.add(l,l.target); POOL.spot.push(l); }
 for(let i=0;i<NPOOL.rect;i++){ const l=new THREE.RectAreaLight(0xffffff,0,1,1); scene.add(l); POOL.rect.push(l); }
 let poolKey='';
+const ZC={ foyer:new THREE.Vector3(-2.5,1.5,4.5), living:new THREE.Vector3(0,1.5,0), dining:new THREE.Vector3(-6.5,1.5,0), bedroom:new THREE.Vector3(7,1.5,0), bath:new THREE.Vector3(7,1.5,5.1) };   // stable scoring point per room
 function syncPool(force){
   const z=zoneOf(camera.position), act=ACTIVE[z]||ALL_ZONES;
-  const key=z+'|'+Math.round(camera.position.x)+','+Math.round(camera.position.z);
+  const key=z;   // per room only: re-picking every metre made lamps pop in and out while moving
   if(!force && key===poolKey) return; poolKey=key;
   for(const type of ['point','spot','rect']){
     const list=RECS[type];
     for(const r of list){ const I=r.l.intensity; if(I<=1e-4){ r.score=-1; continue; }
-      const d2=r.pos.distanceToSquared(camera.position); r.score=(act.includes(r.zone)?1e6:0) + I*(type==='rect'? r.l.width*r.l.height : 1)/(1+.05*d2); }
+      const d2=r.pos.distanceToSquared(ZC[z]||camera.position); r.score=(act.includes(r.zone)?1e6:0) + I*(type==='rect'? r.l.width*r.l.height : 1)/(1+.05*d2); }
     const best=list.filter(r=>r.score>0).sort((a,b)=>b.score-a.score);
     POOL[type].forEach((pl,i)=>{ const r=best[i]; if(!r){ pl.intensity=0; return; } const s=r.l;
       pl.color.copy(s.color); pl.intensity=s.intensity; pl.position.copy(r.pos);
@@ -1394,7 +1395,7 @@ const SCENES = {
 };
 let sceneKey='welcome';
 const S={...SCENES.welcome}, ST={...SCENES.welcome};
-let envDirty=true, sceneMoving=true, needsRender=8;
+let envDirty=true, sceneMoving=true, needsRender=8, holdRender=false;
 const L = THREE.MathUtils.lerp;
 function applyScene(s){
   const e = s.tod*s.tod*(3-2*s.tod), shut=s.curtain;
@@ -1420,7 +1421,7 @@ function applyScene(s){
   renderer.shadowMap.needsUpdate=true; syncPool(true); needsRender=Math.max(needsRender,2);
 }
 applyScene(S);
-function setScene(k){ if(!SCENES[k]) return; if(SCENES[k].tod>0) paintNight(true); sceneKey=k; Object.assign(ST,SCENES[k]); sceneMoving=true; document.querySelectorAll('#scenes button,#cardScenes button').forEach(b=>b.classList.toggle('on',b.dataset.s===k)); $('tod').textContent=t('scene.'+k); }
+function setScene(k){ if(!SCENES[k]) return; if(k!==sceneKey && !touring) TRACK.pv('/scene/'+k); if(SCENES[k].tod>0) paintNight(true); sceneKey=k; Object.assign(ST,SCENES[k]); sceneMoving=true; document.querySelectorAll('#scenes button,#cardScenes button').forEach(b=>b.classList.toggle('on',b.dataset.s===k)); $('tod').textContent=t('scene.'+k); }
 
 /* ================= hotspots & tour data ================= */
 const HOTSPOTS = [
@@ -1479,6 +1480,15 @@ function routeVia(p0,p1){ const a=roomOf(p0.x,p0.z), b=roomOf(p1.x,p1.z); if(a<0
   pts.push(p1.clone()); return pts; }
 const RM = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+/* ================= visit statistics (Vercel Web Analytics, Hobby: page views only) =================
+   Rooms are logged as virtual page views: /room/<zone> once after 4 s in a room, then again every 30 s,
+   so a higher count for a room means it was looked at longer. Also: enter, tour start/end, hotspots, scenes, booking. */
+const TRACK=(()=>{ const pv=p=>{ try{ window.va && window.va('pageview',{ route:p, path:p }); }catch(e){} };
+  let z=null, acc=0, sent=0, on=false;
+  return { pv, start(mode){ on=true; pv('/enter/'+mode); }, zone(k){ z=k; acc=0; sent=0; },
+    tick(dt){ if(!on||!z) return; acc+=dt; const due = acc>=4 ? 1+Math.floor((acc-4)/30) : 0; while(sent<due){ sent++; pv('/room/'+z); } } };
+})();
+TRACK.pv('/intro');
 /* ================= camera ================= */
 let tween=null;
 function flyTo(p,tg,dur=2,done=null,delay=0){ const p0=camera.position.clone(), p1=new THREE.Vector3(...p); let curve=null, d=dur;
@@ -1535,13 +1545,13 @@ document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',
 document.querySelectorAll('#scenes button').forEach(b=>b.addEventListener('click',()=>{ pauseTour(); setScene(b.dataset.s); }));
 $('infoToggle').addEventListener('click',()=>{ $('info').classList.toggle('open'); closeCard(); });
 function toast(msg,ms=3200){ const el=$('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(toast.t); toast.t=setTimeout(()=>el.classList.remove('show'),ms); }
-$('book').addEventListener('click',e=>{ if(!CONFIG.bookingUrl){ e.preventDefault(); toast(t('ui.bookToast')); } });
+$('book').addEventListener('click',e=>{ TRACK.pv('/cta/book'); if(!CONFIG.bookingUrl){ e.preventDefault(); toast(t('ui.bookToast')); } });
 if(CONFIG.bookingUrl) $('book').href=CONFIG.bookingUrl;
 
 // hotspots (DOM markers, hidden when a wall is in the way)
 const hsEls = HOTSPOTS.map(h=>{ const el=document.createElement('button'); el.className='hsp'; el.innerHTML='<i></i>'; el.addEventListener('click',ev=>{ ev.stopPropagation(); pauseTour(); showCard(h.id); }); $('hs').appendChild(el); return {...h, el, v3:new THREE.Vector3(...h.p)}; });
 let openHS=null;
-function showCard(id){ const i=hsEls.findIndex(x=>x.id===id), h=hsEls[i]; openHS=id; document.body.classList.add('card-open'); const [ti,de]=HS_TEXT[id][LANG];
+function showCard(id){ const i=hsEls.findIndex(x=>x.id===id), h=hsEls[i]; if(openHS!==id && !touring) TRACK.pv('/hotspot/'+id); openHS=id; document.body.classList.add('card-open'); const [ti,de]=HS_TEXT[id][LANG];
   $('cardNo').textContent=`${i+1} / ${hsEls.length}`; $('cardT').textContent=ti; $('cardD').textContent=de; $('cardScenes').style.display = h.act==='scenes'?'flex':'none';
   $('card').classList.add('show'); $('info').classList.remove('open');
   $('cardGo').onclick=()=>{ stopTour(); flyTo(h.v.p,h.v.t,1.8); if(h.act==='water') playWater(); };
@@ -1562,24 +1572,24 @@ function showStep(i,fly=true){ tourI=(i+TOUR.length)%TOUR.length; const s=TOUR[t
   $('capStep').textContent=`${tourI+1} / ${TOUR.length}`; $('cap').classList.remove('min'); clearTimeout(showStep.t); showStep.t=setTimeout(()=>$('cap').classList.add('min'),4500); $('capT').textContent=inf.title; $('capD').textContent=inf.desc;
   $('tProg').innerHTML=TOUR.map((_,k)=>`<i class="${k<tourI?'done':''}">${k===tourI?'<b></b>':''}</i>`).join('');
   if(fly){ if(s.sc){ setScene(s.sc); if(s.hold){ ST.curtain=1; } } flyTo(inf.p,inf.t,2.6); if(s.hs==='tub') playWater(); tourElapsed=0; } }
-function startTour(){ closeCard(); $('info').classList.remove('open'); touring=true; tourPaused=false; document.body.classList.add('touring'); $('tPlay').textContent='❚❚'; showStep(0); }
+function startTour(){ TRACK.pv('/tour/start'); closeCard(); $('info').classList.remove('open'); touring=true; tourPaused=false; document.body.classList.add('touring'); $('tPlay').textContent='❚❚'; showStep(0); }
 function stopTour(){ if(!touring) return; touring=false; document.body.classList.remove('touring'); }
 function pauseTour(){ if(touring && !tourPaused){ tourPaused=true; $('tPlay').textContent='▶'; } }
 function resumeTour(){ if(touring && tourPaused){ tourPaused=false; $('tPlay').textContent='❚❚'; } }
 $('tourBtn').addEventListener('click',startTour);
 $('cap').addEventListener('click',e=>{ if(e.target.closest('button')) return; $('cap').classList.toggle('min'); }); $('tX').addEventListener('click',stopTour);
 $('tPrev').addEventListener('click',()=>{ if(tourI>0) showStep(tourI-1); if(tourPaused) resumeTour(); });
-$('tNext').addEventListener('click',()=>{ if(tourI>=TOUR.length-1){ stopTour(); $('info').classList.add('open'); return; } showStep(tourI+1); if(tourPaused) resumeTour(); });
+$('tNext').addEventListener('click',()=>{ if(tourI>=TOUR.length-1){ TRACK.pv('/tour/complete'); stopTour(); $('info').classList.add('open'); return; } showStep(tourI+1); if(tourPaused) resumeTour(); });
 $('tPlay').addEventListener('click',()=> tourPaused? resumeTour() : pauseTour());
 controls.addEventListener('start',()=>{ tween=null; pauseTour(); });
 let lastMove=0; controls.addEventListener('change',()=>{ lastMove=performance.now(); needsRender=Math.max(needsRender,2); });
 let motionLOD=false;
-function setMotionLOD(on){ if(on===motionLOD) return; motionLOD=on; gtao.enabled = HQ && !on; const pr = on ? Math.min(PR,1) : PR; if(renderer.getPixelRatio()!==pr){ renderer.setPixelRatio(pr); composer.setPixelRatio(pr); composer.setSize(innerWidth,innerHeight); } if(!on) needsRender=Math.max(needsRender,1); }
+function setMotionLOD(on){ if(on===motionLOD) return; motionLOD=on; if(!on) needsRender=Math.max(needsRender,1); }   // flag only: AO and resolution stay constant so the image never pops when the camera stops
 
 // more menu
 $('moreBtn').addEventListener('click',e=>{ e.stopPropagation(); $('menu').classList.toggle('open'); });
 addEventListener('click',e=>{ if(!$('more').contains(e.target)) $('menu').classList.remove('open'); });
-function setHQ(v){ HQ=v; motionLOD=false; $('mHQ').classList.toggle('on',HQ); $('mHQ').querySelector('.v').textContent = HQ? t('ui.hqv'):t('ui.sqv'); gtao.enabled=HQ; smaa.enabled=HQ || !TIER.low; PR = HQ? Math.min(devicePixelRatio,1.75) : 1; renderer.setPixelRatio(PR); composer.setPixelRatio(PR); onResize(); }
+function setHQ(v){ HQ=v; motionLOD=false; $('mHQ').classList.toggle('on',HQ); $('mHQ').querySelector('.v').textContent = HQ? t('ui.hqv'):t('ui.sqv'); gtao.enabled=HQ; smaa.enabled=HQ || !TIER.low; PR = HQ? Math.min(devicePixelRatio,1.5) : 1; renderer.setPixelRatio(PR); composer.setPixelRatio(PR); onResize(); }
 $('mHQ').addEventListener('click',()=>setHQ(!HQ));
 $('mFS').addEventListener('click',async()=>{ try{ if(document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); }catch(e){ toast('Full screen unavailable here'); } });
 let perfOn=false; $('mPerf').addEventListener('click',()=>{ perfOn=!perfOn; $('perf').classList.toggle('on',perfOn); $('mPerf').classList.toggle('on',perfOn); $('mPerf').querySelector('.v').textContent=perfOn?'ON':'OFF'; needsRender=Math.max(needsRender,2); });
@@ -1621,7 +1631,7 @@ let benching=false;
 let lastZone=null, frames=0, rendered=0, lastRenderT=0, fpsS=[], perfT=0, adaptiveDone=false;
 function frame(){
   if(benching){ requestAnimationFrame(frame); return; }
-  const dt=Math.min(clock.getDelta(),.1), now=performance.now();
+  const dt=Math.min(clock.getDelta(),.1), now=performance.now(); TRACK.tick(dt);
   // doors: open when the camera (or its next waypoint) is near, close again behind it
   const ddt=Math.min(.5,(now-(frame.lastNow||now))/1000); frame.lastNow=now;   // wall-clock step so doors keep pace with time-based camera moves even on slow frames
   for(const d of DOORLEAF){ const dx=camera.position.x-d.c[0], dz=camera.position.z-d.c[1]; let near=camera.position.y<3 && dx*dx+dz*dz < (d.tk? 3.2*3.2 : 2.5*2.5);
@@ -1650,14 +1660,14 @@ function frame(){
   if(envDirty && !sceneMoving){ envDirty = captureStep(); needsRender=Math.max(needsRender,2); }
   controls.update();
   // tour timing
-  if(touring && !tourPaused && !tween){ tourElapsed+=dt*1000; const el=tourElapsed, bar=document.querySelector('#tProg b'); if(bar) bar.style.width=Math.min(100,el/STEP_MS*100)+'%'; if(el>STEP_MS){ if(tourI===TOUR.length-1){ stopTour(); $('info').classList.add('open'); } else showStep(tourI+1); } }
+  if(touring && !tourPaused && !tween){ tourElapsed+=dt*1000; const el=tourElapsed, bar=document.querySelector('#tProg b'); if(bar) bar.style.width=Math.min(100,el/STEP_MS*100)+'%'; if(el>STEP_MS){ if(tourI===TOUR.length-1){ TRACK.pv('/tour/complete'); stopTour(); $('info').classList.add('open'); } else showStep(tourI+1); } }
   const moving = !!tween || fw || st || (now-lastMove<140) || sceneMoving;
   setMotionLOD(moving);
-  if(needsRender>0){
+  if(needsRender>0 && !holdRender){
     needsRender--;
     syncPool(false);
     const zone=zoneOf(camera.position);
-    if(zone!==lastZone){ lastZone=zone; if(openHS && !touring){ const oz=hsEls.find(h=>h.id===openHS).z; const ok2 = zone==='overview' || oz===zone || (['living','dining'].includes(oz)&&['living','dining'].includes(zone)); if(!ok2 && !tween) closeCard(); } document.querySelectorAll('#planSvg .rm').forEach(r=>r.classList.toggle('on',r.dataset.k===zone)); $('planZone').textContent=t('sp.'+zone); const rn=$('rn'); rn.style.opacity=0; setTimeout(()=>{ rn.textContent=t('sp.'+zone); rn.style.opacity=1; },200); }
+    if(zone!==lastZone){ lastZone=zone; TRACK.zone(zone); if(openHS && !touring){ const oz=hsEls.find(h=>h.id===openHS).z; const ok2 = zone==='overview' || oz===zone || (['living','dining'].includes(oz)&&['living','dining'].includes(zone)); if(!ok2 && !tween) closeCard(); } document.querySelectorAll('#planSvg .rm').forEach(r=>r.classList.toggle('on',r.dataset.k===zone)); $('planZone').textContent=t('sp.'+zone); const rn=$('rn'); rn.style.opacity=0; setTimeout(()=>{ rn.textContent=t('sp.'+zone); rn.style.opacity=1; },200); }
     ceilings.visible = camera.position.y <= TRAY-.05;
     southWalls.forEach(m=>m.visible = !(camera.position.y>3.2)); DOORLEAF.forEach(d=>{ if(d.south) d.g.visible = !(camera.position.y>3.2); });
     VIEW.day.concat(VIEW.night).forEach(m=>m.visible = camera.position.y<3.2);
@@ -1691,10 +1701,14 @@ setScene('welcome');
 const startKey = VIEWS[location.hash.slice(1)] ? location.hash.slice(1) : 'foyer';
 go(startKey,0.01);
 try{ await renderer.compileAsync(scene,camera); }catch(e){}
+{ bokeh.enabled=true; composer.render(.016); bokeh.enabled=false; }
 await tick(100,'load.shader');
 frame();
 $('intro').classList.add('ready');
 // scanned CC0 materials (Poly Haven, KTX2/Basis) replace the procedural placeholders once loaded
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function whenIdle(){ while(tween || performance.now()-lastMove<400 || sceneMoving) await sleep(150); }
+async function precompile(){ holdRender=true; try{ await renderer.compileAsync(scene,camera); }catch(e){} holdRender=false; needsRender=Math.max(needsRender,4); }
 async function loadPBR(){
   const L=new KTX2Loader().setTranscoderPath('tex/basis/').detectSupport(renderer), TL=new THREE.TextureLoader(), an=renderer.capabilities.getMaxAnisotropy();
   const prep=(t,srgb)=>{ t.wrapS=t.wrapT=THREE.RepeatWrapping; t.colorSpace=srgb?THREE.SRGBColorSpace:THREE.NoColorSpace; t.anisotropy=an; return t; };
@@ -1702,6 +1716,7 @@ async function loadPBR(){
   const k = (TIER.low || Math.max(screen.width,screen.height)*devicePixelRatio<1600) ? '_1k' : '';
   const [pa,pn,pr,wa,wn,wr,ln]=await Promise.all([lw('floor_diff'+k,1),lw('floor_nor'+k),lw('floor_rough'+k),
     ld('walnut_veneer_albedo',1),ld('walnut_veneer_normal'),ld('walnut_veneer_roughness'),ld('rough_linen_normal')]);
+  await whenIdle();
   // herringbone baked offline (src/texgen/herringbone.py) from the same layout as the procedural floor, with Poly Haven oak_veneer_01 grain (CC0)
   for(const t of [pa,pn,pr]) t.repeat.copy(TEX.floor.repeat);
   Object.assign(M.floor,{ map:pa, normalMap:pn, roughnessMap:pr, roughness:1 }); M.floor.normalScale.set(.7,.7);
@@ -1709,14 +1724,14 @@ async function loadPBR(){
   ln.repeat.copy(TEX.fabricN.repeat);
   scene.traverse(o=>{ if(!o.material) return; for(const m of [].concat(o.material)){ if(m.normalMap===TEX.fabricN){ m.normalMap=ln; m.needsUpdate=true; } } });
   for(const m of [M.floor,M.walnut,M.ebony]) m.needsUpdate=true;
-  L.dispose(); envDirty=true; needsRender=Math.max(needsRender,4);
+  L.dispose(); await precompile(); envDirty=true;
 }
 const PBR_TINT={ walnut:0x9a8a80, ebony:0x4a4440 };
 // baked ambient occlusion for everything at floor level (Cycles, src/texgen/bake_floor_ao.py), projected top-down via a uv1 channel
 const AO_BOUNDS={ x0:-9, x1:10, z0:-3, z1:7.2 };
 async function loadBakedAO(){
   const t=await new THREE.TextureLoader().loadAsync('lm/floor_ao.webp'); t.channel=1; t.colorSpace=THREE.NoColorSpace; t.anisotropy=renderer.capabilities.getMaxAnisotropy();
-  scene.updateMatrixWorld(true); const flat=new Set(), users=new Map(), bb=new THREE.Box3();
+  await whenIdle(); scene.updateMatrixWorld(true); const flat=new Set(), users=new Map(), bb=new THREE.Box3();
   scene.traverse(o=>{ if(!o.isMesh) return; for(const m of [].concat(o.material)){ if(!users.has(m)) users.set(m,[]); users.get(m).push(o); }
     if(o.isInstancedMesh) return; const g=o.geometry; if(!g.boundingBox) g.computeBoundingBox(); bb.copy(g.boundingBox).applyMatrix4(o.matrixWorld);
     if(bb.max.y<.045 && bb.min.y>-.02 && bb.max.x-bb.min.x>.3 && bb.max.z-bb.min.z>.3) flat.add(o); });
@@ -1735,13 +1750,13 @@ async function loadBakedAO(){
       mm.needsUpdate=true; return mm; };
     o.material = Array.isArray(o.material) ? o.material.map(fix) : fix(o.material);
   }
-  envDirty=true; needsRender=Math.max(needsRender,4);
+  await precompile(); envDirty=true;
 }
 loadPBR().catch(e=>console.warn('PBR textures not loaded',e)).finally(()=>loadBakedAO().catch(e=>console.warn('baked AO not loaded',e)));
 // opening shot: curtains closed, glide from the foyer through the door while the drapes open on the view
 function opening(){ S.curtain=ST.curtain=1; applyScene(S); camera.position.set(-3.1,1.62,5.4); controls.target.set(-2.5,1.45,-3); controls.update();
   flyTo([-1.0,1.58,1.5],[1.4,1.42,-3],5.5,null,500); setTimeout(()=>{ if(sceneKey==='welcome'){ ST.curtain=0; sceneMoving=true; } },1300); }
-function enter(withTour){
+function enter(withTour){ TRACK.start(withTour?'tour':'explore');
   if(!$('intro') || $('intro').classList.contains('gone')){ if(withTour) startTour(); return; }
   document.body.classList.remove('intro'); $('intro').classList.add('gone'); setTimeout(()=>$('intro').remove(),1000);
   needsRender=4;

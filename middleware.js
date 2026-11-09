@@ -1,7 +1,7 @@
 // FAVE Proposal Gate — reusable access-code page for client proposal demos
 // Edit only the CONFIG block below for each new proposal.
 // Fonts are public (SIL OFL) and cached forever, so skip the gate for them.
-export const config = { matcher: '/((?!fonts/).*)' };
+export const config = { matcher: '/((?!fonts/|_vercel/).*)' };   // Vercel Web Analytics script/endpoint must not be gated
 
 const CONFIG = {
   clientName: 'LOTTE HOTEL',                     // used in title / alt text
@@ -54,6 +54,8 @@ function gatePage(next, error) {
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0a0a0a">
 <title>FAVE × ${esc(CONFIG.clientName)} — Private Preview</title>
+<script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};va('pageview',{route:'/gate',path:'/gate'});</script>
+<script defer src="/_vercel/insights/script.js" data-disable-auto-track="1"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -99,6 +101,8 @@ button.loading .bar{animation:load 1s ease-in-out infinite}
 @keyframes load{0%{left:0;width:0}50%{left:0;width:100%}100%{left:100%;width:0}}
 .msg{margin-top:16px;font-size:13px;font-weight:500;min-height:1.3em;color:#ff6b5e;transition:opacity .2s}
 .msg.ok{color:#f0f0f0}
+.note{position:fixed;left:0;right:0;bottom:58px;margin:0 auto;max-width:460px;padding:0 24px;text-align:center;font-size:11px;line-height:1.6;color:#6f6f6f;word-break:keep-all}
+@media (max-width:520px){.note{bottom:44px}}
 .shake{animation:sh .42s}
 @keyframes sh{15%,55%{transform:translateX(-7px)}35%,75%{transform:translateX(7px)}}
 .out{transition:opacity .6s ease,transform .6s ease;opacity:0;transform:scale(.985)}
@@ -129,6 +133,7 @@ button.loading .bar{animation:load 1s ease-in-out infinite}
 <p class="msg" id="msg" role="status" aria-live="polite">${error ? '코드가 올바르지 않습니다.' : ''}</p>
 </form>
 </div></main>
+<p class="note">방문 통계 안내: 제안 후속 안내를 위해 열람 여부와 둘러본 공간을 익명 통계로 수집합니다 (Vercel Web Analytics · 추적 쿠키 없음). 로그인 유지를 위한 필수 쿠키만 사용합니다.</p>
 <script>
 (function(){
 var N=${LEN},next=${JSON.stringify(next).replace(/</g,'\\u003c')};
@@ -150,7 +155,7 @@ function submit(){
  busy=true;btn.disabled=true;btn.classList.add('loading');msg.className='msg';msg.textContent='';
  var body=new URLSearchParams({code:val(),next:next,hash:location.hash||''});
  fetch('/__gate',{method:'POST',body:body,headers:{'x-gate':'1'},credentials:'same-origin'}).then(function(r){return r.json().catch(function(){return{ok:false}})}).then(function(j){
-  if(j&&j.ok){box.classList.add('ok');msg.className='msg ok';msg.textContent='확인되었습니다. 데모로 이동합니다.';setTimeout(function(){wrap.classList.add('out')},250);setTimeout(function(){location.replace(j.location||'/')},800)}
+  if(j&&j.ok){try{va('pageview',{route:'/gate/ok',path:'/gate/ok'})}catch(e){}box.classList.add('ok');msg.className='msg ok';msg.textContent='확인되었습니다. 데모로 이동합니다.';setTimeout(function(){wrap.classList.add('out')},250);setTimeout(function(){location.replace(j.location||'/')},800)}
   else{fails++;setTimeout(function(){reset(fails>=3?'코드가 올바르지 않습니다. 전달받은 메일의 코드를 다시 확인해 주세요.':'코드가 올바르지 않습니다.')},350)}
  }).catch(function(){busy=false;document.getElementById('code').value=val();f.submit()});
 }
