@@ -1675,7 +1675,7 @@ function frame(){
   const dt=Math.min(clock.getDelta(),.1), now=performance.now(); TRACK.tick(dt);
   // doors: open when the camera (or its next waypoint) is near, close again behind it
   const ddt=Math.min(.5,(now-(frame.lastNow||now))/1000); frame.lastNow=now;
-  if(Math.abs(ENTRY.tk-ENTRY.k)>.001){ ENTRY.k += Math.sign(ENTRY.tk-ENTRY.k)*Math.min(Math.abs(ENTRY.tk-ENTRY.k), ddt/1.7); const e=ENTRY.k*ENTRY.k*(3-2*ENTRY.k); entryH.rotation.y=1.3*e; needsRender=Math.max(needsRender,2); }   // wall-clock step so doors keep pace with time-based camera moves even on slow frames
+  if(Math.abs(ENTRY.tk-ENTRY.k)>.001){ ENTRY.k += Math.sign(ENTRY.tk-ENTRY.k)*Math.min(Math.abs(ENTRY.tk-ENTRY.k), ddt/1.7); const e=ENTRY.k*ENTRY.k*(3-2*ENTRY.k); entryH.rotation.y=1.55*e; needsRender=Math.max(needsRender,2); }   // wall-clock step so doors keep pace with time-based camera moves even on slow frames
   for(const d of DOORLEAF){ const dx=camera.position.x-d.c[0], dz=camera.position.z-d.c[1]; let near=camera.position.y<3 && dx*dx+dz*dz < (d.tk? 3.2*3.2 : 2.5*2.5);
     if(!near && tween && tween.doors.includes(d) && dx*dx+dz*dz<5.5*5.5) near=true;   // on our route: open well before we arrive
     d.tk = near?1:0; if(Math.abs(d.tk-d.k)>.001){ d.k += Math.sign(d.tk-d.k)*Math.min(Math.abs(d.tk-d.k), ddt/(d.slide?1.1:1.4)); const e=d.k*d.k*(3-2*d.k);
@@ -1744,7 +1744,8 @@ window.__suite = { scene3:scene, camera, go, dbg:()=>({ bokeh:bokeh.enabled, ap:
 if(TIER.low) setHQ(false);
 renderText();
 setScene('welcome');
-const startKey = VIEWS[location.hash.slice(1)] ? location.hash.slice(1) : 'foyer';
+const HASH0 = location.hash.slice(1);   // the link's own hash (go() below rewrites location.hash)
+const startKey = VIEWS[HASH0] ? HASH0 : 'foyer';
 go(startKey,0.01);
 // fewer shader variants: give every plain standard material a 1x1 white colour/roughness map so they share programs
 // (~2/3 fewer programs to compile; on Windows/ANGLE each one costs 50-200 ms). Normal maps are left alone (zero-UV geometry).
@@ -1843,7 +1844,7 @@ async function arrivalPart(tok){ corridor.visible=true; ENTRY.k=ENTRY.tk=0; entr
   await cw(1300,tok); ENTRY_LED.mat.emissive.setHex(0x2bff6a); sfx('beep'); needsRender=Math.max(needsRender,2);
   await cw(450,tok); ENTRY.tk=1; sfx('latch'); setTimeout(()=>sfx('door'),150);
   await push; await cw(500,tok);
-  await cf([-2.25,1.6,4.5],[-2.95,1.4,0.2],4.6,tok);
+  await cf([-2.0,1.6,4.6],[-2.9,1.4,0.2],4.8,tok);
   ENTRY.tk=0; setTimeout(()=>{ if(ENTRY.tk===0) corridor.visible=false; },1900); }
 async function welcomePart(tok,cut){ const c=cardPose(); if(cut) await fadeCut(c.p,c.t,tok); else setCam(c.p,c.t);
   CINE.dof={ ap:.03, mb:.012 }; if(!cut) showTitle(); await cw(2200,tok);
@@ -1868,7 +1869,7 @@ async function playOpening(mode){ if(!OPEN_RUN[mode]||RM) return; if(CINE.on) sk
   if(!firstPose(mode) || camera.position.distanceTo(new THREE.Vector3(...firstPose(mode).p))>.05) prepOpening(mode);
   try{ await OPEN_RUN[mode](tok); if(tok===CINE.tok) finishOpening(); }catch(e){ if(e!=='skip') { console.warn(e); if(tok===CINE.tok) finishOpening(); } } }
 const OPEN_MODE = (()=>{ if(RM) return 'none'; const q=new URLSearchParams(location.search).get('open'); if(q && (OPENINGS.includes(q)||q==='none')) return q;
-  if(VIEWS[location.hash.slice(1)]) return 'none'; let seen=false; try{ seen=localStorage.getItem('suiteOpened')==='1'; }catch(e){} return seen? 'welcome' : 'signature'; })();
+  if(VIEWS[HASH0]) return 'none'; return 'arrival'; })();   // always start in the corridor: key card, door, step into the suite
 if(OPEN_MODE!=='none') prepOpening(OPEN_MODE);
 // menu: replay any opening
 { const box2=document.createElement('div'); box2.id='mOpen'; box2.innerHTML='<div class="l" data-i="ui.opening"></div><div class="chips">'+OPENINGS.map(m=>`<button data-o="${m}" data-i="op.${m}"></button>`).join('')+'</div>';
